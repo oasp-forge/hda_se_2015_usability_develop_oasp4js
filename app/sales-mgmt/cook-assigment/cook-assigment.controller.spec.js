@@ -1,4 +1,4 @@
-describe('Module: salesMgmt, Controller: cook-position', function () {
+describe('Module: salesMgmt, Controller: cook-assigment', function () {
     'use strict';
     var $scope, currentPositionsMock, deferred, positionStateNotification, positions;
     beforeEach(module('app.sales-mgmt'));
@@ -14,7 +14,7 @@ describe('Module: salesMgmt, Controller: cook-position', function () {
         spyOn(positions, 'setPositionStatusToPrepared').and.returnValue(deferred.promise);
         spyOn(positions, 'makePositionAvailable').and.returnValue(deferred.promise);
         $scope = $rootScope.$new();
-        $controller('CookPositionsCntl', {$scope: $scope, currentPositions: currentPositionsMock, positionStateNotification: positionStateNotification, positions: positions});
+        $controller('CookAssigmentCntl', {$scope: $scope, currentPositions: currentPositionsMock, positionStateNotification: positionStateNotification, positions: positions});
     }));
 
     it('should call positionStateNotification functions on controller initialization', function () {
@@ -32,12 +32,12 @@ describe('Module: salesMgmt, Controller: cook-position', function () {
             $scope.positionsAvailableSelected = [];
             $scope.positionsAvailableSelected.push({id: 1});
             //when then
-            expect($scope.availablePositionSelected()).toBeTruthy();
+            expect($scope.isAvailablePositionSelected()).toBeTruthy();
 
             //when
             $scope.positionsAvailableSelected.length = 0;
             //then
-            expect($scope.availablePositionSelected()).toBeFalsy();
+            expect($scope.isAvailablePositionSelected()).toBeFalsy();
         });
 
         it('should return true when there are assigned positions selected', function () {
@@ -45,24 +45,26 @@ describe('Module: salesMgmt, Controller: cook-position', function () {
             $scope.positionsAssignedSelected = [];
             $scope.positionsAssignedSelected.push({id: 1});
             //when then
-            expect($scope.assignedPositionSelected()).toBeTruthy();
+            expect($scope.isAssignedPositionSelected()).toBeTruthy();
 
             //when
             $scope.positionsAssignedSelected.length = 0;
             //then
-            expect($scope.assignedPositionSelected()).toBeFalsy();
+            expect($scope.isAssignedPositionSelected()).toBeFalsy();
         });
 
-        it('should assign cook to position', inject(function (globalSpinner) {
+        it('should assign cook to positions', inject(function (globalSpinner) {
             //given
             spyOn(globalSpinner, 'decorateCallOfFunctionReturningPromise').and.callThrough();
             $scope.positionsAvailableSelected = [];
             $scope.positionsAvailableSelected.push({id: 1});
+            $scope.positionsAvailableSelected.push({id: 2});
             //when
             $scope.assignCookToPosition();
             //then
             expect(globalSpinner.decorateCallOfFunctionReturningPromise).toHaveBeenCalled();
             expect(positions.assignCookToPosition).toHaveBeenCalledWith($scope.positionsAvailableSelected[0].id);
+            expect(positions.assignCookToPosition).toHaveBeenCalledWith($scope.positionsAvailableSelected[1].id);
         }));
     });
 
@@ -70,14 +72,15 @@ describe('Module: salesMgmt, Controller: cook-position', function () {
         it('should call positions.setPositionStatusToPrepared when Done button is clicked', inject(function (globalSpinner) {
             //given
             spyOn(globalSpinner, 'decorateCallOfFunctionReturningPromise').and.callThrough();
-            var elem = {id: 1};
             $scope.positionsAssignedSelected = [];
-            $scope.positionsAssignedSelected.push(elem);
+            $scope.positionsAssignedSelected.push({id: 1});
+            $scope.positionsAssignedSelected.push({id: 2});
             //when
             $scope.buttonDefs[0].onClick();
             //then
             expect(globalSpinner.decorateCallOfFunctionReturningPromise).toHaveBeenCalled();
-            expect(positions.setPositionStatusToPrepared).toHaveBeenCalledWith(elem.id);
+            expect(positions.setPositionStatusToPrepared).toHaveBeenCalledWith($scope.positionsAssignedSelected[0].id);
+            expect(positions.setPositionStatusToPrepared).toHaveBeenCalledWith($scope.positionsAssignedSelected[1].id);
         }));
 
         it('should activate Done button where there is an assigned position selected', function () {
@@ -91,14 +94,15 @@ describe('Module: salesMgmt, Controller: cook-position', function () {
         it('should call positions.makePositionAvailable when Reject button is clicked', inject(function (globalSpinner) {
             //given
             spyOn(globalSpinner, 'decorateCallOfFunctionReturningPromise').and.callThrough();
-            var elem = {id: 1};
             $scope.positionsAssignedSelected = [];
-            $scope.positionsAssignedSelected.push(elem);
+            $scope.positionsAssignedSelected.push({id: 1});
+            $scope.positionsAssignedSelected.push({id: 2});
             //when
             $scope.buttonDefs[1].onClick();
             //then
             expect(globalSpinner.decorateCallOfFunctionReturningPromise).toHaveBeenCalled();
-            expect(positions.makePositionAvailable).toHaveBeenCalledWith(elem.id);
+            expect(positions.makePositionAvailable).toHaveBeenCalledWith($scope.positionsAssignedSelected[0].id);
+            expect(positions.makePositionAvailable).toHaveBeenCalledWith($scope.positionsAssignedSelected[1].id);
         }));
 
         it('should activate Reject button where there is an assigned position selected', function () {
