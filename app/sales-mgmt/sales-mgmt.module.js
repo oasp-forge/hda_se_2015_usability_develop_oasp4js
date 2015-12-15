@@ -49,4 +49,3 @@ angular.module('app.sales-mgmt', ['app.main', 'app.offer-mgmt', 'app.sales-mgmt.
             )
         );
     });
-

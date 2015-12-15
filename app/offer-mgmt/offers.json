@@ -1,0 +1,38 @@
+[
+    {
+        "id": 101,
+        "desc": "Schnitzelmenü0815",
+        "price": 11.99,
+        "category": [0]
+    }, 
+    {
+        "id": 102,
+        "desc": "Schnitzelmenü08152",
+        "price": 11.95,
+        "category": [0]
+    }, 
+    {
+        "id": 103,
+        "desc": "Schnitzelmenü08153",
+        "price": 11.95,
+        "category": [0]
+    }, 
+    {
+        "id": 104,
+        "desc": "Schnitzelmenü0815",
+        "price": 11.95,
+        "category": [0]
+    }, 
+    {
+        "id": 201,
+        "desc": "Cola",
+        "price": 2.2,
+        "category": [1]
+    }, 
+    {
+        "id": 202,
+        "desc": "Schnaps",
+        "price": 3.5,
+        "category": [1]
+    }
+]

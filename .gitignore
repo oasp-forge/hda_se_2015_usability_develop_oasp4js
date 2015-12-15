@@ -11,3 +11,4 @@ java/target
 .sonar
 *.bak
 docs/
+/nbproject/private/

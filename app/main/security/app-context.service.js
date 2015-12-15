@@ -40,7 +40,7 @@ angular.module('app.main')
                 // TODO remove it once implemented on the server
                 if (angular.isUndefined(userProfile.homeDialogPath)) {
                     if (userProfile.role === 'WAITER') {
-                        currentUserInternal.profile.homeDialogPath = '/table-mgmt/table-search';
+                        currentUserInternal.profile.homeDialogPath = '/order-mgmt/order-overview';
                     } else if (userProfile.role === 'COOK') {
                         currentUserInternal.profile.homeDialogPath = '/sales-mgmt/cook-positions';
                     } else {
