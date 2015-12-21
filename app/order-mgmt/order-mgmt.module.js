@@ -7,41 +7,37 @@
  * @requires app.main
  * @requires order-mgmt.templates
  */
-angular.module('app.order-mgmt', ['app.offer-mgmt', 'app.sales-mgmt', 'app.main', 'app.order-mgmt.templates'], function (ROLES, $stateProvider, oaspTranslationProvider, oaspAuthorizationServiceProvider) {
-    'use strict';
-    oaspTranslationProvider.enableTranslationForModule('order-mgmt');
+angular.module('app.order-mgmt', ['app.offer-mgmt', 'app.sales-mgmt', 'app.main', 'app.order-mgmt.templates'])
+        .constant("ORDER_STORAGE", "orders")
+        .config(function (ROLES, $stateProvider, oaspTranslationProvider, oaspAuthorizationServiceProvider) {
+            'use strict';
+            oaspTranslationProvider.enableTranslationForModule('order-mgmt');
 
-    $stateProvider.state('orderMgmt', {
-        abstract: true,
-        url: '/order-mgmt',
-        template: '<ui-view/>'
-    });
-    
-    $stateProvider.state('orderMgmt.overview', oaspAuthorizationServiceProvider.usersHavingAnyRoleOf(ROLES.WAITER).mayGoToStateDefinedAs({
-        url: '/order-overview',
-        templateUrl: 'order-mgmt/order-overview/order-overview.html',
-        controller: 'OrderOverviewCntl',
-        controllerAs: 'OOC'
-    }));
+            $stateProvider.state('orderMgmt', {
+                abstract: true,
+                url: '/order-mgmt',
+                template: '<ui-view/>',
+                resolve: {
+                    offerList: ['offersJson', function (offersJson) {
+                            return offersJson.loadAllOffers().$promise.then(function(result){
+                                return result;
+                            });
+                    }]
+                }
+                
+            });
 
-//    $stateProvider.state('orderMgmt.search', oaspAuthorizationServiceProvider.usersHavingAnyRoleOf(ROLES.WAITER).mayGoToStateDefinedAs({
-//        url: '/order-search',
-//        templateUrl: 'order-mgmt/order-search/order-search.html',
-//        controller: 'TableSearchCntl',
-//        controllerAs: 'TSC',
-//        resolve: {
-//            paginatedTableList: ['orders', function (orders) {
-//                return orders.getPaginatedTables(1, 4).then(function (paginatedTables) {
-//                    return paginatedTables;
-//                });
-//            }]
-//        }
-//    }));
-//
-//    $stateProvider.state('orderMgmt.details', {
-//        url: '/order-details/:orderId',
-//        templateUrl: 'order-mgmt/order-details/order-details.html',
-//        controller: 'TableDetailsCntl',
-//        controllerAs: 'TDC'
-//    });
-});
+            $stateProvider.state('orderMgmt.overview', oaspAuthorizationServiceProvider.usersHavingAnyRoleOf(ROLES.WAITER).mayGoToStateDefinedAs({
+                url: '/order-overview',
+                templateUrl: 'order-mgmt/order-overview/order-overview.html',
+                controller: 'OrderOverviewCntl',
+                controllerAs: 'OOC'
+            }));
+
+            $stateProvider.state('orderMgmt.order', {
+                url: '/order/:orderId',
+                templateUrl: 'order-mgmt/order/order.html',
+                controller: 'OrderCntl',
+                controllerAs: 'OC'
+            });
+        });

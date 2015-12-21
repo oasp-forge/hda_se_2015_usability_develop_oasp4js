@@ -1,26 +1,29 @@
 
 angular.module('app.order-mgmt').controller('OrderOverviewCntl',
-        function ($scope, $sce, $stateParams, offersJson, globalSpinner, positionStateNotification, $state) {
+        function ($scope, $sce, $stateParams, offerList, orderOverview, globalSpinner, positionStateNotification, $state) {
             'use strict';
 
             var self = this;
             self.model = {};
-
-            $scope.offers = offersJson.loadAllOffers();
-            $scope.selOffers = [];
             
-            $scope.addToOrder = function (offer) {
-                var found=false;
-                for (var i=0; i<$scope.selOffers.length; ++i){
-                    if (offer === $scope.selOffers[i].order){
-                        $scope.selOffers[i].count++;
-                        found=true;
-                        break;
-                    }
-                }
-                if (!found)
-                    $scope.selOffers.push({count: 1, order: offer});
-                //alert(offer.desc + " hinzugefügt !");
+            self.loadAllOrders = function() {
+                self.orders = orderOverview.loadAllOrders();
+                $scope.orders = self.orders.orderObjects;
+                $scope.nextId = parseInt(self.orders.maxId) + 1;
+            }
+            self.loadAllOrders();
+            
+            $scope.newOrder = function() {
+                $state.go('orderMgmt.order', {orderId: $scope.nextId});
+            };
+            
+            $scope.deleteAllOrders = function() {
+                orderOverview.deleteAllOrders();
+                self.loadAllOrders();
+            }
+            
+            $scope.loadOrder = function (id, order) {
+                $state.go('orderMgmt.order', {orderId: id});
             };
             
             $scope.deleteFromOrder = function (offer) {

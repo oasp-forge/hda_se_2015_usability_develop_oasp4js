@@ -1,6 +1,6 @@
 <div class="row">
-    <div class="col-md-6">Übersicht
-
+    <div class="col-md-12">Übersicht
+        <button ng-click="newOrder()">Neu</button><button ng-click="deleteAllOrders()">Alle Löschen</button>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -13,35 +13,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="offer in offers | filter:queryOffer" ng-click="addToOrder(offer)">
-                    <td>{{offer.id}}</td>
-                    <td>{{offer.desc}}</td>
-                    <td>{{offer.price | priceEuro}}</td>
+                <tr ng-repeat="(id, order) in orders | filter:queryOffer" ng-click="loadOrder(id, order)">
+                    <td>{{id}}</td>
+                    <td><span ng-repeat="offer in offers">{{offer[0]}}x {{offer[1]}}</span></td>
+                    <td>{{order.timestamp | date:'HH:mm' | timestamp}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="col-md-6">Bestellung<table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Anz.</th>
-                    <th>#</th>
-                    <th>
-                        <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                        <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrder" placeholder="Search...">
-                    </th>
-                    <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
-                    <th><span translate>ORDER_MGMT.TABLE.STATUS</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="offer in selOffers | filter:queryOrder | orderBy:'order.desc' track by $index" ng-click="deleteFromOrder(offer)">
-                    <td>{{offer.count}}</td>
-                    <td>{{offer.order.id}}</td>
-                    <td>{{offer.order.desc}}</td>
-                    <td>{{offer.order.price | priceEuro}}</td>
-                </tr>
-            </tbody>
-        </table></div>
 </div>
