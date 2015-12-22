@@ -4,7 +4,7 @@
  * @module app.offer-mgmt
  * @requires offer-mgmt.offerManagementRestService
  */
-angular.module('app.order-mgmt').factory('orderFactory', function (ORDER_STORAGE) {
+angular.module('app.order-mgmt').factory('orderFactory2', function (ORDER_STORAGE) {
     'use strict';
     return {
         /**
@@ -31,7 +31,11 @@ angular.module('app.order-mgmt').factory('orderFactory', function (ORDER_STORAGE
          */
         loadOrder: function (id) {
             //alert(JSON.parse(localStorage.getItem(ORDER_STORAGE))[id]);
-            return JSON.parse(localStorage.getItem(ORDER_STORAGE))[id];
+            
+            if (localStorage.getItem(ORDER_STORAGE) !== null)
+                return JSON.parse(localStorage.getItem(ORDER_STORAGE))[id];
+            else
+                return null;
         }
     };
 });

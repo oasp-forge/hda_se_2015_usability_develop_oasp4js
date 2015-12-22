@@ -1,0 +1,63 @@
+// counter
+
+.init() {
+    .inc-impl(1); // set initial value
+} .init();
+
+.inc-impl(@new) {
+    .redefine() {
+        @hue: @new;
+    }
+}
+
+@size: 50px;
+@radius: @size/2;
+.categorySelector{
+    text-align:center;
+    width: @size+10;
+    border: 1px solid black;
+    height: @size;
+    float: left;
+    margin: 10px;
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.categorySelectorSelected{
+    border: 3px solid black !important;
+}
+
+.someSelector(@name) {
+    .redefine(); // this sets the value of counter for this call only
+    .inc-impl((@hue + 1)); // this sets the value of counter for the next call
+    @className: ~"@{name}";
+    .@{className} {
+        background-color: hsv(mod(@hue*35 - 35,360),100%,100%);
+    }
+}
+
+.someSelector("category0");
+.category0 {background-color: transparent;}
+.someSelector("category1");
+.someSelector("category2");
+.someSelector("category3");
+.someSelector("category4");
+.someSelector("category5");
+.someSelector("category6");
+.someSelector("category7");
+.someSelector("category8");
+.someSelector("category9");
+.someSelector("category10");
+.someSelector("category11");
+.someSelector("category12");
+.someSelector("category13");
+.someSelector("category14");
+.someSelector("category15");
+.someSelector("category16");
+.someSelector("category17");
+.someSelector("category18");
+.someSelector("category19");
+.someSelector("category20");
+
+

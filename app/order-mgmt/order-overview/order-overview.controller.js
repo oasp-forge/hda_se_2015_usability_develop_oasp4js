@@ -1,13 +1,13 @@
 
 angular.module('app.order-mgmt').controller('OrderOverviewCntl',
-        function ($scope, $sce, $stateParams, offerList, orderOverview, globalSpinner, positionStateNotification, $state) {
+        function ($filter, $scope, $sce, $stateParams, offerList, orderFactory, globalSpinner, positionStateNotification, $state) {
             'use strict';
-
+            
             var self = this;
             self.model = {};
             
             self.loadAllOrders = function() {
-                self.orders = orderOverview.loadAllOrders();
+                self.orders = orderFactory.loadAllOrders();
                 $scope.orders = self.orders.orderObjects;
                 $scope.nextId = parseInt(self.orders.maxId) + 1;
             }
@@ -18,7 +18,7 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
             };
             
             $scope.deleteAllOrders = function() {
-                orderOverview.deleteAllOrders();
+                orderFactory.deleteAllOrders();
                 self.loadAllOrders();
             }
             

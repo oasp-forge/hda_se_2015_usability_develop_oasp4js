@@ -4,7 +4,7 @@
  * @module app.offer-mgmt
  * @requires offer-mgmt.offerManagementRestService
  */
-angular.module('app.order-mgmt').factory('orderOverview', function (ORDER_STORAGE) {
+angular.module('app.order-mgmt').factory('orderOverview2', function (ORDER_STORAGE) {
     'use strict';
     return {
         /**
@@ -30,7 +30,7 @@ angular.module('app.order-mgmt').factory('orderOverview', function (ORDER_STORAG
         },
         
         deleteAllOrders: function () {
-            localStorage.setItem(ORDER_STORAGE, null);
+            localStorage.removeItem(ORDER_STORAGE);
         }
     };
 });

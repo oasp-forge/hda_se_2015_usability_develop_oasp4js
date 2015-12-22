@@ -9,7 +9,7 @@
  */
 angular.module('app.order-mgmt', ['app.offer-mgmt', 'app.sales-mgmt', 'app.main', 'app.order-mgmt.templates'])
         .constant("ORDER_STORAGE", "orders")
-        .config(function (ROLES, $stateProvider, oaspTranslationProvider, oaspAuthorizationServiceProvider) {
+        .config(function (ROLES, $stateProvider, orderFactoryProvider, oaspTranslationProvider, oaspAuthorizationServiceProvider) {
             'use strict';
             oaspTranslationProvider.enableTranslationForModule('order-mgmt');
 
@@ -19,12 +19,13 @@ angular.module('app.order-mgmt', ['app.offer-mgmt', 'app.sales-mgmt', 'app.main'
                 template: '<ui-view/>',
                 resolve: {
                     offerList: ['offersJson', function (offersJson) {
-                            return offersJson.loadAllOffers().$promise.then(function(result){
+                            return offersJson.loadAllOffers().$promise.then(function (result) {
+                                orderFactoryProvider.setOfferList(result);
                                 return result;
                             });
-                    }]
+                        }]
                 }
-                
+
             });
 
             $stateProvider.state('orderMgmt.overview', oaspAuthorizationServiceProvider.usersHavingAnyRoleOf(ROLES.WAITER).mayGoToStateDefinedAs({

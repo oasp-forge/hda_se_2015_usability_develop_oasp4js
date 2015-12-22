@@ -1,0 +1,37 @@
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-hover col-md-6">
+                <thead>
+                    <tr>
+                        <th>Anz.</th>
+                        <th>#</th>
+                        <th>
+                            <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
+                            <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrder" placeholder="Search...">
+                        </th>
+                        <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
+                        <th><span translate>ORDER_MGMT.TABLE.STATUS</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="offer in order.offers| filter:queryOrder | orderBy:'order.desc' track by $index" ng-click="selectCategoryOnOrder($index)" ng-class="getCategoryClassOnOrder($index)">
+                        <td>{{offer.count}}</td>
+                        <td>{{offer.order.id}}</td>
+                        <td>{{offer.order.desc}}</td>
+                        <td>{{offer.order.price| priceEuro}}</td>
+                        <td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="col-md-12">Gesamtpreis: {{orderPrice| priceEuro}}</div>
+            <button ng-click="ok()">Ok</button>
+            <div class="checkbox">
+                <label><input type="checkbox" value="">Option 1</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div ng-repeat="category in categories" class="{{'category' + $index}} categorySelector" ng-click="selectCategory($index)" ng-class="{categorySelectorSelected: $index==selectedCategory}">{{category}}</div>
+        </div> 
+    </div>
+</div>

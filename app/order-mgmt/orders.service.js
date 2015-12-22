@@ -1,92 +1,112 @@
 /**
  * @ngdoc service
- * @name order-mgmt.orders
- * @module app.order-mgmt
- * @requires order-mgmt.orderManagementRestService
+ * @name offer-mgmt.offers
+ * @module app.offer-mgmt
+ * @requires offer-mgmt.offerManagementRestService
  */
-angular.module('app.order-mgmt').factory('orders', function (orderManagementRestService) {
+angular.module('app.order-mgmt').provider('orderFactory', function () {
     'use strict';
-    var paginatedTables = {};
-    return {
-        /**
-         * @ngdoc method
-         * @name order-mgmt.orders#getTable
-         * @methodOf order-mgmt.orders
-         *
-         * @params {number} pagenumber
-         * @params {number} pagesize
-         * @return {promise} promise
-         */
-        getPaginatedTables: function (pagenumber, pagesize) {
-            return orderManagementRestService.getPaginatedTables(pagenumber, pagesize).then(function (response) {
-                angular.copy(response.data, paginatedTables);
-                return paginatedTables;
-            });
-        },
-        /**
-         * @ngdoc method
-         * @name order-mgmt.orders#getTable
-         * @methodOf order-mgmt.orders
-         *
-         * @params {number} orderId
-         * @return {promise} promise
-         */
-        loadTable: function (orderId) {
-            return orderManagementRestService.getTable(orderId).then(function (response) {
-                return response.data;
-            });
-        },
-        /**
-         * @ngdoc method
-         * @name order-mgmt.orders#getTable
-         * @methodOf order-mgmt.orders
-         *
-         * @params {object} order
-         * @return {promise} promise
-         */
-        reserve: function (order) {
-            order.state = 'RESERVED';
-            return orderManagementRestService.saveTable(order).then(function () {
-            });
-        },
-        /**
-         * @ngdoc method
-         * @name order-mgmt.orders#getTable
-         * @methodOf order-mgmt.orders
-         *
-         * @params {object} order
-         * @return {promise} promise
-         */
-        free: function (order) {
-            order.state = 'FREE';
-            return orderManagementRestService.saveTable(order).then(function () {
-            });
-        },
-        /**
-         * @ngdoc method
-         * @name order-mgmt.orders#getTable
-         * @methodOf order-mgmt.orders
-         *
-         * @params {object} order
-         * @return {promise} promise
-         */
-        occupy: function (order) {
-            order.state = 'OCCUPIED';
-            return orderManagementRestService.saveTable(order).then(function () {
-            });
-        },
-        /**
-         * @ngdoc method
-         * @name order-mgmt.orders#getTable
-         * @methodOf order-mgmt.orders
-         *
-         * @params {object} order
-         * @return {promise} promise
-         */
-        cancelReservation: function (order) {
-            order.state = 'FREE';
-            return orderManagementRestService.saveTable(order).then(function () {
-            });
-        }
+    var offerList = null;
+
+    this.setOfferList = function (_offerList) {
+        offerList = _offerList;
+    };
+
+    this.$get = function (ORDER_STORAGE, $filter) {
+        var self = this;
+        
+        self.convertOrderIdsToObjects = function (order) {
+            var fullOrder = {
+                customer: null,
+                timestamp: null,
+                table: null,
+                offers: []
+            };
+
+            if (order){
+                if (order.customer)
+                    fullOrder.customer = order.customer;
+                if (order.timestamp)
+                    fullOrder.timestamp = order.timestamp;
+                if (order.table)
+                    fullOrder.table = order.table;
+
+                if (order.offers) {
+                    //Bestellungen mappen
+                    for (var i = 0; i < order.offers.length; ++i) {
+                        for (var k = 0; k < offerList.length; ++k) {
+                            if (order.offers[i][1] == offerList[k].id) {
+                                fullOrder.offers.push({'count': order.offers[i][0], 'order': offerList[k]});
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return fullOrder;
+        };
+
+        self.convertOrderObjectsToIds = function (order) {
+            var idOrder = {
+                customer: "Schmidt",
+                timestamp: Date.now(),
+                table: 1,
+                offers: []
+            };
+            
+            if (order){
+                if (order.offers) {
+                    for (var i = 0; i < order.offers.length; ++i) {
+                        idOrder.offers.push([order.offers[i].count, order.offers[i].order.id]);
+                    }
+                }
+            }
+
+            return idOrder;
+        };
+
+
+        return {
+            offerList: function(){
+                return offerList;
+            },
+            
+            saveOrder: function (id, order) {
+                var allOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
+                if (!allOrders)
+                    allOrders = {};
+
+                allOrders[id] = self.convertOrderObjectsToIds(order);
+                localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
+            },
+            
+            loadOrder: function (id) {
+                //alert(JSON.parse(localStorage.getItem(ORDER_STORAGE))[id]);
+
+                if (localStorage.getItem(ORDER_STORAGE) !== null)
+                    return self.convertOrderIdsToObjects(JSON.parse(localStorage.getItem(ORDER_STORAGE))[id]);
+                else
+                    return self.convertOrderIdsToObjects(null);
+            },
+            loadAllOrders: function () {
+
+                var orders = {maxId: -1, orderObjects: null};
+                orders.orderObjects = JSON.parse(localStorage.getItem(ORDER_STORAGE));
+                if (orders.orderObjects) {
+                    var keys = Object.keys(orders.orderObjects);
+                    for (var i = 0; i < keys.length; ++i) {
+                        if (orders.maxId < keys[i]) {
+                            orders.maxId = keys[i];
+                        }
+                    }
+                }
+
+                return orders;
+            },
+            deleteAllOrders: function () {
+                localStorage.removeItem(ORDER_STORAGE);
+            }
+        };
     };
 });
