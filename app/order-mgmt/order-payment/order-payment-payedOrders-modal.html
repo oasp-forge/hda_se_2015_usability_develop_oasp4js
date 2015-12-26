@@ -1,0 +1,11 @@
+<div class="modal-body">
+    <div class="btn-group" dropdown is-open="status.isopen">
+        <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle ng-disabled="disabled">
+            Select number in new Category <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+            <li ng-repeat="n in range(1,orderNumber)" role="menuitem"><a ng-click="ok(n)">{{n}}</a></li>
+        </ul>
+    </div>
+    <button class="btn" ng-click="cancel()">Canel</button>
+</div>

@@ -35,8 +35,8 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                     //Bestellungen mappen
                     for (var i = 0; i < order.offers.length; ++i) {
                         for (var k = 0; k < offerList.length; ++k) {
-                            if (order.offers[i][1] == offerList[k].id) {
-                                fullOrder.offers.push({'count': order.offers[i][0], 'order': offerList[k]});
+                            if (order.offers[i][0] == offerList[k].id) {
+                                fullOrder.offers.push({'order': offerList[k], 'count': order.offers[i][1], 'payed': order.offers[i][2]});
                                 break;
                             }
                         }
@@ -58,7 +58,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             if (order){
                 if (order.offers) {
                     for (var i = 0; i < order.offers.length; ++i) {
-                        idOrder.offers.push([order.offers[i].count, order.offers[i].order.id]);
+                        idOrder.offers.push([order.offers[i].order.id, order.offers[i].count, order.offers[i].payed]);
                     }
                 }
             }

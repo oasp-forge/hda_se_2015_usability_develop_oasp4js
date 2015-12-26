@@ -20,7 +20,7 @@ angular.module('app.order-mgmt').controller('OrderCntl',
             $scope.saveOrder = function () {
                 orderFactory.saveOrder($stateParams.orderId, $scope.order);
                 $state.go('orderMgmt.overview');
-            }
+            };
 
             $scope.addToOrder = function (offer) {
                 var found = false;
@@ -39,14 +39,27 @@ angular.module('app.order-mgmt').controller('OrderCntl',
             $scope.deleteFromOrder = function (offer) {
                 for (var i = 0; i < $scope.order.offers.length; ++i) {
                     if (offer === $scope.order.offers[i]) {
-                        if ($scope.order.offers[i].count > 1)
-                            $scope.order.offers[i].count--;
-                        else
-                            $scope.order.offers.splice(i, 1);
+                        if ($scope.order.offers[i].payed < $scope.order.offers[i].count || !$scope.order.offers[i].payed){
+                            if ($scope.order.offers[i].count > 1)
+                                $scope.order.offers[i].count--;
+                            else
+                                $scope.order.offers.splice(i, 1);
+                        }
                         break;
                     }
                 }
                 //alert(offer.desc + " hinzugefügt !");
+            };
+            
+            $scope.getStatus = function(offer){
+                if (offer.count == offer.payed)
+                    return "Bezahlt";
+                else if (offer.count > offer.payed && offer.payed != 0 && offer.payed )
+                    return "Teilweise bezahlt";
+                else if (offer.payed == 0 || !offer.payed )
+                    return "Nicht bezahlt";
+                else
+                    return "Ungültig"
             };
 
             $scope.payOrder = function () {
