@@ -21,7 +21,7 @@
                             <tr ng-repeat="offer in order.offers| filter:queryOrder | filter: billFilter | orderBy:'order.desc' track by $index" ng-click="raiseCurBill(offer)">
                                 <td>{{calcNumBill(offer)}}</td>
                                 <td>{{offer.order.id}}</td>
-                                <td>{{offer.order.desc}}</td>
+                                <td>{{offer.order.title}}</td>
                                 <td>{{offer.order.price| priceEuro}}</td>
                                 <td>
                             </tr>
@@ -48,7 +48,7 @@
                             <tr ng-repeat="offer in order.offers| filter:queryOrder | filter: curBillFilter | orderBy:'order.desc' track by $index" ng-click="lowerCurBill(offer)">
                                 <td>{{offer.curBill}}</td>
                                 <td>{{offer.order.id}}</td>
-                                <td>{{offer.order.desc}}</td>
+                                <td>{{offer.order.title}}</td>
                                 <td>{{offer.order.price| priceEuro}}</td>
                                 <td>
                             </tr>
@@ -80,7 +80,7 @@
                             <tr ng-repeat="offer in order.offers| filter:queryOrder | filter: payedFilter | orderBy:'order.desc' track by $index" ng-click="lowerPayed(offer)">
                                 <td>{{offer.payed}}</td>
                                 <td>{{offer.order.id}}</td>
-                                <td>{{offer.order.desc}}</td>
+                                <td>{{offer.order.title}}</td>
                                 <td>{{offer.order.price| priceEuro}}</td>
                                 <td>
                             </tr>

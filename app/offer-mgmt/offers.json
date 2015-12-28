@@ -1,38 +1,44 @@
 [
     {
         "id" : 101,
-        "desc": "Schnitzelmenü0815",
+        "title": "Cordon Bleu",
+        "desc": "gefüllt mit Schinken und Käse",
         "price": 11.95,
-        "category": [0]
+        "category": [300]
     }, 
     {
         "id" : 102,
-        "desc": "Schnitzelmenü08152",
+        "title": "Cordon Bleu Art des Hauses",
+        "desc": "gefüllt mit Schinken, Knobi und Käse",
         "price": 11.95,
-        "category": [0]
+        "category": [300]
     }, 
     {
         "id" : 103,
-        "desc": "Schnitzelmenü08153",
+        "title": "Rindgericht 1",
+        "desc": "Beschreibung",
         "price": 11.95,
-        "category": [0]
+        "category": [301]
     }, 
     {
         "id" : 104,
-        "desc": "Schnitzelmenü0815",
+        "title": "Rindgericht 2",
+        "desc": "Beschreibung",
         "price": 11.95,
-        "category": [0]
+        "category": [301]
     }, 
     {
         "id" : 201,
-        "desc": "Cola",
+        "title": "Cola",
+        "desc": "mit Eis",
         "price": 2.2,
-        "category": [1]
+        "category": [200]
     }, 
     {
         "id" : 202,
-        "desc": "Schnaps",
+        "title": "Schnaps",
+        "desc": "mit Zitrone",
         "price": 3.5,
-        "category": [1]
+        "category": [201]
     }
 ]

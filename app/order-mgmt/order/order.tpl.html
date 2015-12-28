@@ -10,55 +10,72 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <table class="table table-hover raiseTable">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>
-                        <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                        <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOffer"
-                               placeholder="Search...">
-                    </th>
-                    <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="offer in offers| filter:queryOffer" ng-click="addToOrder(offer)">
-                    <td>{{offer.id}}</td>
-                    <td>{{offer.desc}}</td>
-                    <td>{{offer.price| priceEuro}}</td>
-                </tr>
-                </tbody>
-            </table>
+            
+            <div class="col-md-3">
+                <accordion close-others="true" class="orderMgmtCategories">
+                    <accordion-group ng-repeat="cat in orderCategories" is-open="cat.open">
+                        <accordion-heading>
+                            <div ng-click="setCurOrderCategories(cat, cat.open)">
+                                {{cat.title}} </div>
+                        </accordion-heading>
+                        <div ng-repeat="(id, val) in cat.content" ng-click="setCurOrderCategory(id, val)">{{val}}</div>
+                    </accordion-group>
+                </accordion>
+
+            </div>
+            <div class="col-md-9">
+                {{"Auswahlkategorie: " +curOrderCategories.title}}
+                <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOffer"
+                       placeholder="Search...">
+                <table class="table table-hover raiseTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>
+                                <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
+
+                            </th>
+                            <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="offer in offers| filter:queryOffer | filter:categoryFilter" ng-click="addToOrder(offer)">
+                            <td>{{offer.id}}</td>
+                            <td>{{offer.title}}<br><span style="font-size: 8pt">{{offer.desc}}</span></td>
+                            <td>{{offer.price| priceEuro}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="col-md-6">
+            <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrder"
+                   placeholder="Search...">
             <table class="table table-hover lowerTable">
                 <thead>
-                <tr>
-                    <th>Anz.</th>
-                    <th>#</th>
-                    <th>
-                        <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                        <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrder"
-                               placeholder="Search...">
-                    </th>
-                    <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
-                    <th><span translate>ORDER_MGMT.TABLE.STATUS</span></th>
-                </tr>
+                    <tr>
+                        <th>Anz.</th>
+                        <th>#</th>
+                        <th>
+                            <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
+                        </th>
+                        <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
+                        <th><span translate>ORDER_MGMT.TABLE.STATUS</span></th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="offer in order.offers| filter:queryOrder | orderBy:'order.desc' track by $index"
-                    ng-click="deleteFromOrder(offer)">
-                    <td>{{offer.count}}</td>
-                    <td>{{offer.order.id}}</td>
-                    <td>{{offer.order.desc}}</td>
-                    <td>{{offer.order.price| priceEuro}}</td>
-                    <td>{{getStatus(offer)}}</td>
-                </tr>
+                    <tr ng-repeat="offer in order.offers| filter:queryOrder | orderBy:'order.title' track by $index"
+                        ng-click="deleteFromOrder(offer)">
+                        <td>{{offer.count}}</td>
+                        <td>{{offer.order.id}}</td>
+                        <td>{{offer.order.title}}<br><span style="font-size: 8pt">{{offer.order.desc}}</span></td>
+                        <td>{{offer.order.price| priceEuro}}</td>
+                        <td>{{getStatus(offer)}}</td>
+                    </tr>
                 </tbody>
             </table>
             <div class="col-md-4">Gesamtpreis: {{orderPrice| priceEuro}}</div>
-            <div class="col-md-4">Verbleibender Preis: {{leftPrice | priceEuro}}</div>
+            <div class="col-md-4">Verbleibender Preis: {{leftPrice| priceEuro}}</div>
             <button class="btn btn-primary col-md-4" ng-click="payOrder()">Bezahlen...</button>
         </div>
     </div>

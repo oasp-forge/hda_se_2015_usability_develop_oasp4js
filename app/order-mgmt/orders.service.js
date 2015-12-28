@@ -15,8 +15,18 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
     this.$get = function (ORDER_STORAGE, $filter) {
         var self = this;
         
-        self.convertOrderIdsToObjects = function (order) {
+        /**
+         * Gets an compressed order-Object and an id. 
+         * The order-Object contains only ids, e.g. to offers, customers, etc.
+         * This function replaces the ids with the related objects.
+         * 
+         * @param {type} order
+         * @param {type} id
+         * @returns {orders.service_L7.$get.self.convertOrderIdsToObjects.fullOrder}
+         */
+        self.convertOrderIdsToObjects = function (order, id) {
             var fullOrder = {
+                id: id,
                 customer: null,
                 timestamp: null,
                 table: null,
@@ -47,6 +57,13 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             return fullOrder;
         };
 
+        /**
+         * Gets an expanded order and compresses it, so it is ready to store in localStorage.
+         * That means it returns an order, that contains just ids and primitive datatypes.
+         * 
+         * @param {type} order
+         * @returns {orders.service_L7.$get.self.convertOrderIdsToObjects.fullOrder}
+         */
         self.convertOrderObjectsToIds = function (order) {
             var idOrder = {
                 customer: "Schmidt",
@@ -68,27 +85,54 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
 
 
         return {
+            /**
+             * Returns the offerList, which should be initialized by the main module
+             */
             offerList: function(){
                 return offerList;
             },
             
-            saveOrder: function (id, order) {
+            /**
+             * Gets a full order and stores it, as object, into local storage.
+             * Not as an array, because otherwise it has to be checked, whether
+             * an id exists or not for each element manually.
+             * 
+             * @param {type} order 
+             */
+            saveOrder: function (order) {
                 var allOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
                 if (!allOrders)
                     allOrders = {};
-
-                allOrders[id] = self.convertOrderObjectsToIds(order);
+                
+                allOrders[order.id] = self.convertOrderObjectsToIds(order);
                 localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
             },
             
+            /**
+             * 
+             * @param {type} id
+             * @returns {orders.service_L7.$get.self.convertOrderIdsToObjects.fullOrder}Loads an expanded order. If the order with the given id
+             * does not exist, it returns an order object with the id, anyway,
+             * so the saveOrder-Method can be called with that object and 
+             * automatically has an id
+             * 
+             * @param {type} id 
+             */
             loadOrder: function (id) {
                 //alert(JSON.parse(localStorage.getItem(ORDER_STORAGE))[id]);
-
-                if (localStorage.getItem(ORDER_STORAGE) !== null)
-                    return self.convertOrderIdsToObjects(JSON.parse(localStorage.getItem(ORDER_STORAGE))[id]);
+                
+                var storedOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
+                
+                if (storedOrders !== null){
+                    return self.convertOrderIdsToObjects(storedOrders[id], id);
+                }
                 else
-                    return self.convertOrderIdsToObjects(null);
+                    return self.convertOrderIdsToObjects(null, id);
             },
+            
+            /**
+             * Returns all orders (expanded), stored in localStorage.
+             */
             loadAllOrders: function () {
 
                 var orders = {maxId: -1, orderObjects: null};
@@ -96,6 +140,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 if (orders.orderObjects) {
                     var keys = Object.keys(orders.orderObjects);
                     for (var i = 0; i < keys.length; ++i) {
+                        orders.orderObjects[keys[i]] = self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]);
                         if (orders.maxId < keys[i]) {
                             orders.maxId = keys[i];
                         }

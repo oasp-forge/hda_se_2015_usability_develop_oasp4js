@@ -63,19 +63,42 @@
 
 
 .orderMgmt .table-hover {
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  user-select: none;  
-  
-  cursor: pointer;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;  
+
+    cursor: pointer;
 }
 .orderMgmt .raiseTable tbody tr:hover td{
     background-color: lightgreen !important;
-    
+
 }
 
 .orderMgmt .lowerTable tbody tr:hover td{
     background-color: lightsalmon !important;
-    
+
+}
+
+//Kategorien (Accordion) in Übersicht
+.orderMgmt .orderMgmtCategories {
+    .panel-heading, .panel-body {
+        cursor: pointer;
+        padding: 0px !important;
+    }
+    .panel-heading div {
+        padding: 10px !important;
+    }
+    .panel-body>div {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+    }
+    .panel-body>div:hover {
+        background-color: #f9f9f9;
+    }
+    .panel-heading div:hover {
+        background-color: #f9f9f9;
+    }
 }

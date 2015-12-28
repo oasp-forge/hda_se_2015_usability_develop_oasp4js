@@ -4,19 +4,25 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>
-                        <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                        <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOffer" placeholder="Search...">
+                        Datum/Uhrzeit 
                     </th>
+                    <th>
+                        <span translate>Bestellung</span>
+                        <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders" placeholder="Search...">
+                    </th>
+                    <th>Tisch</th>
+                    <th>Kunde</th>
                     <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="(id, order) in orders | filter:queryOffer" ng-click="loadOrder(id, order)">
-                    <td>{{id}}</td>
-                    <td><span ng-repeat="offer in offers">{{offer[0]}}x {{offer[1]}}</span></td>
-                    <td>{{order.timestamp | date:'HH:mm' | timestamp}}</td>
+                <tr ng-repeat="order in orders | orderBy:'timestamp':false" ng-click="loadOrder(order)">
+                    <td>{{order.timestamp | date:'dd.MM.yy - HH:mm:ss' | timestamp}}</td>
+                    <td><span ng-repeat="offer in order.offers">{{offer.count}}x {{offer.order.title}},&nbsp;</span></td>
+                    <td>{{order.table}}</td>
+                    <td>{{order.customer}}</td>
+                    <td>€</td>
                 </tr>
             </tbody>
         </table>
