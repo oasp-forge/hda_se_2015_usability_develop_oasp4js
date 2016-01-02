@@ -3,7 +3,7 @@ angular.module('app.order-mgmt')
         'use strict';
         return function (item) {
             if (!item)
-                return "Kein Kunde gewählt";
+                return "";
             else
                 return item;
         };
