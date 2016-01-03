@@ -8,6 +8,7 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
 
             $scope.datePicker = {
                 dt: new Date(),
+                
                 today: function () {
                     this.dt = new Date();
                 },
@@ -19,7 +20,7 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
                 },
                 dateOptions: {
                     formatYear: 'yy',
-                    startingDay: 0
+                    startingDay: 1
                 },
                 status: {
                     opened: false

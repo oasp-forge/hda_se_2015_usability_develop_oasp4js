@@ -150,18 +150,30 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             /**
              * Returns all orders (expanded), stored in localStorage.
              */
-            loadAllOrders: function (timestamp) {
+            loadAllOrders: function (date) {
                 var orders = {maxId: -1, orderObjects: null};
                 orders.orderObjects = JSON.parse(localStorage.getItem(ORDER_STORAGE));
                 if (orders.orderObjects) {
                     var keys = Object.keys(orders.orderObjects);
                     var orderObjArray = [];
-                    var cmpTimestamp = parseInt(timestamp / 1000 / 60 / 60 / 24);
+                    var tempDate;
+                    var sameDate;
                     for (var i = 0; i < keys.length; ++i) {
                         //orders.orderObjects[parseInt(keys[i])] = self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]);
-                        if (parseInt(orders.orderObjects[keys[i]].timestamp / 1000 / 60 / 60 / 24) === cmpTimestamp || !timestamp) {
+                        if (date){
+                            tempDate = new Date(orders.orderObjects[keys[i]].timestamp);
+                            if (date.getDate() == tempDate.getDate()
+                                    && date.getMonth() == tempDate.getMonth()
+                                    && date.getYear() == tempDate.getYear()) {
+                                sameDate = true;
+                            }
+                            else
+                                sameDate = false;
+                        }
+                        if (sameDate || !date){
                             orderObjArray.push(self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]));
                         }
+                        
                         if (orders.maxId < keys[i]) {
                             orders.maxId = keys[i];
                         }

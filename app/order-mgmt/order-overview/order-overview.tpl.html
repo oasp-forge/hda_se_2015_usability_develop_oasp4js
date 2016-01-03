@@ -1,8 +1,8 @@
 <div class="row orderMgmt">
-    <div class="col-md-12">Übersicht
-        <button ng-click="deleteAllOrders()">Alle Löschen</button>
+    <div class="col-md-9"><h2>Übersicht</h2>
+        <button ng-click="deleteAllOrders()" ng-show="false">Alle Löschen</button>
         <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders" placeholder="Search...">
-        <table class="table table-hover">
+        <table class="table table-hover overviewTable">
             <thead>
                 <tr>
                     <th>

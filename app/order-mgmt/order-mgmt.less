@@ -69,6 +69,9 @@
     user-select: none;  
 
     cursor: pointer;
+    thead {
+        cursor: default;
+    }
 }
 .orderMgmt .raiseTable tbody tr:hover td{
     background-color: lightgreen !important;
@@ -100,5 +103,11 @@
     }
     .panel-heading div:hover {
         background-color: #f9f9f9;
+    }
+}
+
+.orderMgmt .overviewTable {
+    th {
+        vertical-align: top;
     }
 }
