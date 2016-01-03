@@ -8,6 +8,7 @@ angular.module('app.order-mgmt').controller('OrderCntl',
         $scope.offers = orderFactory.offerList();
         $scope.order = orderFactory.loadOrder($stateParams.orderId);
 
+        $scope.tables = [1,2,3,4,5,6];
         $scope.orderCategories = [
             {
                 title: 'Vorspeisen',
@@ -102,6 +103,11 @@ angular.module('app.order-mgmt').controller('OrderCntl',
             orderFactory.saveOrder($scope.order);
             $state.go('orderMgmt.overview');
         };
+        
+        $scope.deleteOrder = function () {
+            orderFactory.deleteOrder($scope.order);
+            $state.go('orderMgmt.overview');
+        };
 
         $scope.addToOrder = function (offer) {
             var found = false;
@@ -133,11 +139,12 @@ angular.module('app.order-mgmt').controller('OrderCntl',
         };
 
         $scope.getStatus = function (offer) {
-            if (offer.count == offer.payed)
+            var status = orderFactory.getOfferStatus(offer);
+            if (status == 0)
                 return "Bezahlt";
-            else if (offer.count > offer.payed && offer.payed != 0 && offer.payed)
+            else if (status == 1)
                 return "Teilweise bezahlt";
-            else if (offer.payed == 0 || !offer.payed)
+            else if (status == 2)
                 return "Nicht bezahlt";
             else
                 return "Ungültig"

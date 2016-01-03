@@ -6,13 +6,53 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
             var self = this;
             self.model = {};
 
+            $scope.datePicker = {
+                dt: new Date(),
+                today: function () {
+                    this.dt = new Date();
+                },
+                clear: function () {
+                    $scope.dt = null;
+                },
+                open: function ($event) {
+                    this.status.opened = true;
+                },
+                dateOptions: {
+                    formatYear: 'yy',
+                    startingDay: 0
+                },
+                status: {
+                    opened: false
+                }
+            };
+
             self.loadAllOrders = function () {
-                self.orders = orderFactory.loadAllOrders();
+                self.orders = orderFactory.loadAllOrders($scope.datePicker.dt);
                 $scope.orders = self.orders.orderObjects;
                 $scope.nextId = parseInt(self.orders.maxId) + 1;
             };
             self.loadAllOrders();
 
+            $scope.$watch('datePicker.dt', function (newArray) {
+                self.loadAllOrders();
+            }, true);
+
+            $scope.getStatus = function (order) {
+                
+                var curStatus, payed = 0;
+                for (var i=0; i<order.offers.length; ++i){
+                    curStatus = orderFactory.getOfferStatus(order.offers[i]);
+                    if (curStatus == 1 || curStatus == 2)
+                        return "Offen";
+                    else if(curStatus == 0){
+                        payed++;
+                    }
+                }
+                if (payed == order.offers.length)
+                    return "Bezahlt";
+                else
+                    return "Ungültig";
+            };
 
             $scope.newOrder = function () {
                 $state.go('orderMgmt.order', {orderId: $scope.nextId});
@@ -39,24 +79,4 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
                 }
                 //alert(offer.desc + " hinzugefügt !");
             };
-            
-            //            $scope.datePickerFrom = {
-//                dt: new Date(),
-//                today: function () {
-//                    this.dt = new Date();
-//                },
-//                clear: function () {
-//                    $scope.dt = null;
-//                },
-//                open: function ($event) {
-//                    this.status.opened = true;
-//                },
-//                dateOptions: {
-//                    formatYear: 'yy',
-//                    startingDay: 0
-//                },
-//                status: {
-//                    opened: false
-//                }
-//            };
         });

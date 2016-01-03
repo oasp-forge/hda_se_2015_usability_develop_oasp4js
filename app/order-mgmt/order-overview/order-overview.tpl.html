@@ -1,31 +1,47 @@
 <div class="row orderMgmt">
     <div class="col-md-12">Übersicht
-        <button ng-click="newOrder()">Neu</button><button ng-click="deleteAllOrders()">Alle Löschen</button>
+        <button ng-click="deleteAllOrders()">Alle Löschen</button>
+        <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders" placeholder="Search...">
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th>
-                        Datum/Uhrzeit 
+                        Datum/Uhrzeit
+                        <div class="input-group" style="float:right">
+                            <input type="text" 
+                                   class="form-control" 
+                                   datepicker-popup="{{'dd.MM.yy'}}" 
+                                   ng-model="datePicker.dt" 
+                                   is-open="datePicker.status.opened" 
+                                   datepicker-options="datePicker.dateOptions" 
+                                   ng-required="true" 
+                                   close-text="Schließen" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="datePicker.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </div>
                     </th>
-                    <th>
+                    <th style="width:50%">
                         <span translate>Bestellung</span>
-                        <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders" placeholder="Search...">
                     </th>
                     <th>Tisch</th>
                     <th>Kunde</th>
                     <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
+                    <th><span translate>Bezahlt</span></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="order in orders | orderBy:'timestamp':false" ng-click="loadOrder(order)">
-                    <td>{{order.timestamp | date:'dd.MM.yy - HH:mm:ss' | timestamp}}</td>
+                <tr ng-repeat="order in orders| orderBy:'timestamp':false | filter: queryOrders" ng-click="loadOrder(order)">
+                    <td>{{order.timestamp | date:'dd.MM.yy - HH:mm:ss' }}</td>
                     <td><span ng-repeat="offer in order.offers">{{offer.count}}x {{offer.order.title}},&nbsp;</span></td>
                     <td>{{order.table}}</td>
                     <td>{{order.customer}}</td>
                     <td>€</td>
+                    <td>{{getStatus(order)}}</td>
                 </tr>
             </tbody>
         </table>
+        <button class="btn btn-primary" ng-click="newOrder()">Neu</button>
     </div>
 
 </div>

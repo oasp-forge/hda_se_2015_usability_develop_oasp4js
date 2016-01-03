@@ -1,7 +1,11 @@
 <div class="orderMgmt">
     <div class="row">
         <div class="col-md-6">Übersicht</div>
-        <div class="col-md-2">Tisch-Nr.: {{order.table| table}}</div>
+        <div class="col-md-2">Tisch-Nr.: 
+            <select class="form-control" ng-model="order.table" size="1" style="width:50%;float:right"> 
+                <option ng-repeat="table in tables">{{table}}</option> 
+            </select>
+        </div>
         <div class="col-md-2">Bestellung <br> {{order.timestamp| date:'HH:mm' | timestamp }}</div>
         <div class="col-md-2">
             <button class="btn btn-default" ng-click="setCustomer()">Kunde {{order.customer| customer}} zuordnen
@@ -80,4 +84,5 @@
         </div>
     </div>
 </div>
-<button class="btn btn-default" ng-click="saveOrder()">Bestellung speichern</button>
+<button class="btn btn-primary" ng-click="saveOrder()">Bestellung speichern</button>
+<button class="btn btn-danger" ng-click="deleteOrder()">Bestellung löschen</button>

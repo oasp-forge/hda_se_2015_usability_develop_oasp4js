@@ -14,7 +14,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
 
     this.$get = function (ORDER_STORAGE, $filter) {
         var self = this;
-        
+
         /**
          * Gets an compressed order-Object and an id. 
          * The order-Object contains only ids, e.g. to offers, customers, etc.
@@ -33,7 +33,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 offers: []
             };
 
-            if (order){
+            if (order) {
                 if (order.customer)
                     fullOrder.customer = order.customer;
                 if (order.timestamp)
@@ -71,8 +71,9 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 table: 1,
                 offers: []
             };
-            
-            if (order){
+
+            if (order) {
+                idOrder.table = order.table;
                 if (order.offers) {
                     for (var i = 0; i < order.offers.length; ++i) {
                         idOrder.offers.push([order.offers[i].order.id, order.offers[i].count, order.offers[i].payed]);
@@ -88,10 +89,20 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             /**
              * Returns the offerList, which should be initialized by the main module
              */
-            offerList: function(){
+            offerList: function () {
                 return offerList;
             },
             
+            getOfferStatus: function (offer) {
+                if (offer.count == offer.payed)
+                    return 0; //Payed
+                else if (offer.count > offer.payed && offer.payed != 0 && offer.payed)
+                    return 1; //Partly payed
+                else if (offer.payed == 0 || !offer.payed)
+                    return 2; //Not payed
+                else
+                    return -1;
+            },
             /**
              * Gets a full order and stores it, as object, into local storage.
              * Not as an array, because otherwise it has to be checked, whether
@@ -103,11 +114,19 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 var allOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
                 if (!allOrders)
                     allOrders = {};
-                
+
                 allOrders[order.id] = self.convertOrderObjectsToIds(order);
                 localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
             },
             
+            deleteOrder: function (order) {
+                var allOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
+                if (!allOrders)
+                    allOrders = {};
+                
+                delete allOrders[order.id];
+                localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
+            },
             /**
              * 
              * @param {type} id
@@ -120,31 +139,34 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
              */
             loadOrder: function (id) {
                 //alert(JSON.parse(localStorage.getItem(ORDER_STORAGE))[id]);
-                
+
                 var storedOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
-                
-                if (storedOrders !== null){
+
+                if (storedOrders !== null) {
                     return self.convertOrderIdsToObjects(storedOrders[id], id);
-                }
-                else
+                } else
                     return self.convertOrderIdsToObjects(null, id);
             },
-            
             /**
              * Returns all orders (expanded), stored in localStorage.
              */
-            loadAllOrders: function () {
-
+            loadAllOrders: function (timestamp) {
                 var orders = {maxId: -1, orderObjects: null};
                 orders.orderObjects = JSON.parse(localStorage.getItem(ORDER_STORAGE));
                 if (orders.orderObjects) {
                     var keys = Object.keys(orders.orderObjects);
+                    var orderObjArray = [];
+                    var cmpTimestamp = parseInt(timestamp / 1000 / 60 / 60 / 24);
                     for (var i = 0; i < keys.length; ++i) {
-                        orders.orderObjects[keys[i]] = self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]);
+                        //orders.orderObjects[parseInt(keys[i])] = self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]);
+                        if (parseInt(orders.orderObjects[keys[i]].timestamp / 1000 / 60 / 60 / 24) === cmpTimestamp || !timestamp) {
+                            orderObjArray.push(self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]));
+                        }
                         if (orders.maxId < keys[i]) {
                             orders.maxId = keys[i];
                         }
                     }
+                    orders.orderObjects = orderObjArray;
                 }
 
                 return orders;
