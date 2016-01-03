@@ -13,18 +13,18 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
     };
 
     var customerList = null;
-    this.setCustomerList = function(_customerList){
+    this.setCustomerList = function (_customerList) {
         customerList = _customerList;
     };
 
     this.$get = function (ORDER_STORAGE, CUSTOMER_STORAGE, $filter) {
         var self = this;
-        
+
         /**
-         * Gets an compressed order-Object and an id. 
+         * Gets an compressed order-Object and an id.
          * The order-Object contains only ids, e.g. to offers, customers, etc.
          * This function replaces the ids with the related objects.
-         * 
+         *
          * @param {type} order
          * @param {type} id
          * @returns {orders.service_L7.$get.self.convertOrderIdsToObjects.fullOrder}
@@ -39,7 +39,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 offers: []
             };
 
-            if (order){
+            if (order) {
                 if (order.customerId)
                     fullOrder.customerId = order.customerId;
                 if (order.customerName)
@@ -54,7 +54,11 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                     for (var i = 0; i < order.offers.length; ++i) {
                         for (var k = 0; k < offerList.length; ++k) {
                             if (order.offers[i][0] == offerList[k].id) {
-                                fullOrder.offers.push({'order': offerList[k], 'count': order.offers[i][1], 'payed': order.offers[i][2]});
+                                fullOrder.offers.push({
+                                    'order': offerList[k],
+                                    'count': order.offers[i][1],
+                                    'payed': order.offers[i][2]
+                                });
                                 break;
                             }
                         }
@@ -65,12 +69,12 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             return fullOrder;
         };
 
-        self.convertCustomerIdsToObjects = function(customer, id){
+        self.convertCustomerIdsToObjects = function (customer, id) {
             var fullCustomer = {
                 id: id,
                 name: null
             };
-            if (customer){
+            if (customer) {
                 if (customer.name)
                     fullCustomer.name = customer.name;
             }
@@ -80,18 +84,27 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
         /**
          * Gets an expanded order and compresses it, so it is ready to store in localStorage.
          * That means it returns an order, that contains just ids and primitive datatypes.
-         * 
+         *
          * @param {type} order
          * @returns {orders.service_L7.$get.self.convertOrderIdsToObjects.fullOrder}
          */
         self.convertOrderObjectsToIds = function (order, customer) {
             var idOrder = {
-                customerId: customer.id,
-                customerName: customer.name,
+                customerId: null,
+                customerName: null,
                 timestamp: Date.now(),
                 table: 1,
                 offers: []
             };
+
+            if (customer) {
+                if (customer.id) {
+                    idOrder.customerId = customer.id;
+                }
+                if (customer.name) {
+                    idOrder.customerName = customer.name;
+                }
+            }
 
             if (order) {
                 idOrder.table = order.table;
@@ -105,7 +118,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             return idOrder;
         };
 
-        self.convertCustomerObjectsToIds = function(customer){
+        self.convertCustomerObjectsToIds = function (customer) {
             var idCustomer = {
                 id: customer.id,
                 name: customer.name
@@ -118,11 +131,11 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             /**
              * Returns the offerList, which should be initialized by the main module
              */
-            offerList: function(){
+            offerList: function () {
                 return offerList;
             },
 
-            customerList: function(){
+            customerList: function () {
                 return customerList;
             },
 
@@ -140,19 +153,19 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
              * Gets a full order and stores it, as object, into local storage.
              * Not as an array, because otherwise it has to be checked, whether
              * an id exists or not for each element manually.
-             * 
-             * @param {type} order 
+             *
+             * @param {type} order
              */
             saveOrder: function (order) {
                 var allOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
                 if (!allOrders)
                     allOrders = {};
-                
+
                 allOrders[order.id] = self.convertOrderObjectsToIds(order);
                 localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
             },
 
-            saveCustomer: function(customer){
+            saveCustomer: function (customer) {
                 var allCustomers = JSON.parse(localStorage.getItem(CUSTOMER_STORAGE));
                 if (!allCustomers)
                     allCustomers = {};
@@ -170,30 +183,30 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
             },
             /**
-             * 
+             *
              * @param {type} id
              * @returns {orders.service_L7.$get.self.convertOrderIdsToObjects.fullOrder}Loads an expanded order. If the order with the given id
              * does not exist, it returns an order object with the id, anyway,
-             * so the saveOrder-Method can be called with that object and 
+             * so the saveOrder-Method can be called with that object and
              * automatically has an id
-             * 
-             * @param {type} id 
+             *
+             * @param {type} id
              */
             loadOrder: function (id) {
                 //alert(JSON.parse(localStorage.getItem(ORDER_STORAGE))[id]);
-                
+
                 var storedOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
-                
-                if (storedOrders !== null){
+
+                if (storedOrders !== null) {
                     return self.convertOrderIdsToObjects(storedOrders[id], id);
                 } else
                     return self.convertOrderIdsToObjects(null, id);
             },
 
-            loadCustomer: function(id){
+            loadCustomer: function (id) {
                 var storedCustomers = JSON.parse(localStorage.getItem(CUSTOMER_STORAGE));
 
-                if (storedCustomers !== null){
+                if (storedCustomers !== null) {
                     return self.convertCustomerIdsToObjects(storedCustomers[id], id);
                 }
                 else
@@ -213,17 +226,17 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                     var sameDate;
                     for (var i = 0; i < keys.length; ++i) {
                         //orders.orderObjects[parseInt(keys[i])] = self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]);
-                        if (date){
+                        if (date) {
                             tempDate = new Date(orders.orderObjects[keys[i]].timestamp);
                             if (date.getDate() == tempDate.getDate()
-                                    && date.getMonth() == tempDate.getMonth()
-                                    && date.getYear() == tempDate.getYear()) {
+                                && date.getMonth() == tempDate.getMonth()
+                                && date.getYear() == tempDate.getYear()) {
                                 sameDate = true;
                             }
                             else
                                 sameDate = false;
                         }
-                        if (sameDate || !date){
+                        if (sameDate || !date) {
                             orderObjArray.push(self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]));
                         }
 
@@ -240,7 +253,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             /**
              * Returns all customers from localStorage
              */
-            loadAllCustomers: function(){
+            loadAllCustomers: function () {
                 var customers = {maxId: -1, customerObjects: null};
                 customers.customerObjects = JSON.parse(localStorage.getItem(CUSTOMER_STORAGE));
                 if (customers.customerObjects) {
@@ -258,7 +271,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             deleteAllOrders: function () {
                 localStorage.removeItem(ORDER_STORAGE);
             },
-            deleteAllCustomers: function(){
+            deleteAllCustomers: function () {
                 localStorage.removeItem(CUSTOMER_STORAGE);
             }
         };

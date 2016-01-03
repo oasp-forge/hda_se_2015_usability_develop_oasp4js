@@ -35,7 +35,7 @@
                     <td>{{order.timestamp | date:'dd.MM.yy - HH:mm:ss' }}</td>
                     <td><span ng-repeat="offer in order.offers">{{offer.count}}x {{offer.order.title}},&nbsp;</span></td>
                     <td>{{order.table}}</td>
-                    <td>{{order.customer}}</td>
+                    <td>{{order.customerName}}</td>
                     <td>€</td>
                     <td>{{getStatus(order)}}</td>
                 </tr>
