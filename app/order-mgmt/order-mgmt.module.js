@@ -9,6 +9,7 @@
  */
 angular.module('app.order-mgmt', ['app.offer-mgmt', 'app.sales-mgmt', 'app.main', 'app.order-mgmt.templates'])
     .constant("ORDER_STORAGE", "orders")
+    .constant("CUSTOMER_STORAGE", "customers")
     .config(function (ROLES, $stateProvider, orderFactoryProvider, oaspTranslationProvider, oaspAuthorizationServiceProvider) {
         'use strict';
         oaspTranslationProvider.enableTranslationForModule('order-mgmt');
@@ -25,7 +26,6 @@ angular.module('app.order-mgmt', ['app.offer-mgmt', 'app.sales-mgmt', 'app.main'
                     });
                 }]
             }
-
         });
 
         $stateProvider.state('orderMgmt.overview', oaspAuthorizationServiceProvider.usersHavingAnyRoleOf(ROLES.WAITER).mayGoToStateDefinedAs({
@@ -39,6 +39,14 @@ angular.module('app.order-mgmt', ['app.offer-mgmt', 'app.sales-mgmt', 'app.main'
             url: '/order/:orderId',
             templateUrl: 'order-mgmt/order/order.html',
             controller: 'OrderCntl',
-            controllerAs: 'OC'
+            controllerAs: 'OC',
+            //resolve: {
+            //    customerList: ['customersJson', function (customerJson) {
+            //        return customerJson.loadAllCustomers().$promise.then(function (result) {
+            //            orderFactoryProvider.setCustomerList(result);
+            //            return result;
+            //        })
+            //    }]
+            //}
         });
     });

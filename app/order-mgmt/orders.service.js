@@ -12,9 +12,14 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
         offerList = _offerList;
     };
 
-    this.$get = function (ORDER_STORAGE, $filter) {
-        var self = this;
+    var customerList = null;
+    this.setCustomerList = function(_customerList){
+        customerList = _customerList;
+    };
 
+    this.$get = function (ORDER_STORAGE, CUSTOMER_STORAGE, $filter) {
+        var self = this;
+        
         /**
          * Gets an compressed order-Object and an id. 
          * The order-Object contains only ids, e.g. to offers, customers, etc.
@@ -27,15 +32,18 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
         self.convertOrderIdsToObjects = function (order, id) {
             var fullOrder = {
                 id: id,
-                customer: null,
+                customerId: null,
+                customerName: null,
                 timestamp: null,
                 table: null,
                 offers: []
             };
 
-            if (order) {
-                if (order.customer)
-                    fullOrder.customer = order.customer;
+            if (order){
+                if (order.customerId)
+                    fullOrder.customerId = order.customerId;
+                if (order.customerName)
+                    fullOrder.customerName = order.customerName;
                 if (order.timestamp)
                     fullOrder.timestamp = order.timestamp;
                 if (order.table)
@@ -57,6 +65,18 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             return fullOrder;
         };
 
+        self.convertCustomerIdsToObjects = function(customer, id){
+            var fullCustomer = {
+                id: id,
+                name: null
+            };
+            if (customer){
+                if (customer.name)
+                    fullCustomer.name = customer.name;
+            }
+            return fullCustomer;
+        };
+
         /**
          * Gets an expanded order and compresses it, so it is ready to store in localStorage.
          * That means it returns an order, that contains just ids and primitive datatypes.
@@ -64,9 +84,10 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
          * @param {type} order
          * @returns {orders.service_L7.$get.self.convertOrderIdsToObjects.fullOrder}
          */
-        self.convertOrderObjectsToIds = function (order) {
+        self.convertOrderObjectsToIds = function (order, customer) {
             var idOrder = {
-                customer: "Schmidt",
+                customerId: customer.id,
+                customerName: customer.name,
                 timestamp: Date.now(),
                 table: 1,
                 offers: []
@@ -84,15 +105,27 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             return idOrder;
         };
 
+        self.convertCustomerObjectsToIds = function(customer){
+            var idCustomer = {
+                id: customer.id,
+                name: customer.name
+            };
+            return idCustomer;
+        }
+
 
         return {
             /**
              * Returns the offerList, which should be initialized by the main module
              */
-            offerList: function () {
+            offerList: function(){
                 return offerList;
             },
-            
+
+            customerList: function(){
+                return customerList;
+            },
+
             getOfferStatus: function (offer) {
                 if (offer.count == offer.payed)
                     return 0; //Payed
@@ -114,16 +147,25 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 var allOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
                 if (!allOrders)
                     allOrders = {};
-
+                
                 allOrders[order.id] = self.convertOrderObjectsToIds(order);
                 localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
             },
-            
+
+            saveCustomer: function(customer){
+                var allCustomers = JSON.parse(localStorage.getItem(CUSTOMER_STORAGE));
+                if (!allCustomers)
+                    allCustomers = {};
+
+                allCustomers[customer.id] = self.convertCustomerObjectsToIds(customer);
+                localStorage.setItem(CUSTOMER_STORAGE, JSON.stringify(allCustomers));
+            },
+
             deleteOrder: function (order) {
                 var allOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
                 if (!allOrders)
                     allOrders = {};
-                
+
                 delete allOrders[order.id];
                 localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
             },
@@ -139,14 +181,25 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
              */
             loadOrder: function (id) {
                 //alert(JSON.parse(localStorage.getItem(ORDER_STORAGE))[id]);
-
+                
                 var storedOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
-
-                if (storedOrders !== null) {
+                
+                if (storedOrders !== null){
                     return self.convertOrderIdsToObjects(storedOrders[id], id);
                 } else
                     return self.convertOrderIdsToObjects(null, id);
             },
+
+            loadCustomer: function(id){
+                var storedCustomers = JSON.parse(localStorage.getItem(CUSTOMER_STORAGE));
+
+                if (storedCustomers !== null){
+                    return self.convertCustomerIdsToObjects(storedCustomers[id], id);
+                }
+                else
+                    return self.convertCustomerIdsToObjects(null, id);
+            },
+
             /**
              * Returns all orders (expanded), stored in localStorage.
              */
@@ -173,7 +226,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                         if (sameDate || !date){
                             orderObjArray.push(self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]));
                         }
-                        
+
                         if (orders.maxId < keys[i]) {
                             orders.maxId = keys[i];
                         }
@@ -183,8 +236,30 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
 
                 return orders;
             },
+
+            /**
+             * Returns all customers from localStorage
+             */
+            loadAllCustomers: function(){
+                var customers = {maxId: -1, customerObjects: null};
+                customers.customerObjects = JSON.parse(localStorage.getItem(CUSTOMER_STORAGE));
+                if (customers.customerObjects) {
+                    var keys = Object.keys(customers.customerObjects);
+                    for (var i = 0; i < keys.length; ++i) {
+                        customers.customerObjects[keys[i]] = self.convertOrderIdsToObjects(customers.customerObjects[keys[i]], keys[i]);
+                        if (customers.maxId < keys[i]) {
+                            customers.maxId = keys[i];
+                        }
+                    }
+                }
+
+                return customers;
+            },
             deleteAllOrders: function () {
                 localStorage.removeItem(ORDER_STORAGE);
+            },
+            deleteAllCustomers: function(){
+                localStorage.removeItem(CUSTOMER_STORAGE);
             }
         };
     };
