@@ -12,11 +12,6 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
         offerList = _offerList;
     };
 
-    var customerList = null;
-    this.setCustomerList = function (_customerList) {
-        customerList = _customerList;
-    };
-
     this.$get = function (ORDER_STORAGE, CUSTOMER_STORAGE, $filter) {
         var self = this;
 
@@ -88,7 +83,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
          * @param {type} order
          * @returns {orders.service_L7.$get.self.convertOrderIdsToObjects.fullOrder}
          */
-        self.convertOrderObjectsToIds = function (order, customer) {
+        self.convertOrderObjectsToIds = function (order) {
             var idOrder = {
                 customerId: null,
                 customerName: null,
@@ -97,16 +92,13 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 offers: []
             };
 
-            if (customer) {
-                if (customer.id) {
-                    idOrder.customerId = customer.id;
-                }
-                if (customer.name) {
-                    idOrder.customerName = customer.name;
-                }
-            }
-
             if (order) {
+                if (order.customerId) {
+                    idOrder.customerId = order.customerId;
+                }
+                if (order.customerName) {
+                    idOrder.customerName = order.customerName;
+                }
                 idOrder.table = order.table;
                 if (order.offers) {
                     for (var i = 0; i < order.offers.length; ++i) {
@@ -133,10 +125,6 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
              */
             offerList: function () {
                 return offerList;
-            },
-
-            customerList: function () {
-                return customerList;
             },
 
             getOfferStatus: function (offer) {
@@ -259,7 +247,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 if (customers.customerObjects) {
                     var keys = Object.keys(customers.customerObjects);
                     for (var i = 0; i < keys.length; ++i) {
-                        customers.customerObjects[keys[i]] = self.convertOrderIdsToObjects(customers.customerObjects[keys[i]], keys[i]);
+                        customers.customerObjects[keys[i]] = self.convertCustomerIdsToObjects(customers.customerObjects[keys[i]], keys[i]);
                         if (customers.maxId < keys[i]) {
                             customers.maxId = keys[i];
                         }
