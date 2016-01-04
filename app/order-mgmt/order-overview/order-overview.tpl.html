@@ -44,7 +44,7 @@
                     <td><span ng-repeat="offer in order.offers">{{offer.count}}x {{offer.order.title}},&nbsp;</span></td>
                     <td>{{order.table}}</td>
                     <td>{{order.customerName}}</td>
-                    <td>€</td>
+                    <td>{{getPrice(order) | priceEuro}}</td>
                     <td>{{order.status}}</td>
                     <td ng-click="$event.stopPropagation()" style="cursor:default">
                         <button class="btn btn-danger" ng-click="deleteOrder(order)"><span class="glyphicon glyphicon-remove"></span></button>

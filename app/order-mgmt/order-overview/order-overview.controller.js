@@ -69,6 +69,14 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
             $scope.newOrder = function () {
                 $state.go('orderMgmt.order', {orderId: $scope.nextId});
             };
+            
+            $scope.getPrice = function (order){
+                var price=0;
+                angular.forEach(order.offers, function(offer){
+                    price += offer.order.price * offer.count;
+                });
+                return price;
+            };
 
             $scope.deleteAllOrders = function () {
                 orderFactory.deleteAllOrders();
