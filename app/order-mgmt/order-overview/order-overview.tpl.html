@@ -1,13 +1,12 @@
 <div class="row orderMgmt">
-    <div class="col-md-9"><h2>Übersicht</h2>
+    <div class="col-md-12"><h2>Übersicht</h2>
         <button ng-click="deleteAllOrders()" ng-show="false">Alle Löschen</button>
-        <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders" placeholder="Search...">
         <table class="table table-hover overviewTable">
             <thead>
                 <tr>
                     <th>
                         Datum/Uhrzeit
-                        <div class="input-group" style="float:right">
+                        <div class="input-group" style="width:125px">
                             <input type="text" 
                                    class="form-control" 
                                    datepicker-popup="{{'dd.MM.yy'}}" 
@@ -21,27 +20,38 @@
                             </span>
                         </div>
                     </th>
-                    <th style="width:50%">
+                    <th>
                         <span translate>Bestellung</span>
                     </th>
-                    <th>Tisch</th>
-                    <th>Kunde</th>
+                    <th>Tisch
+                        <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders.table" style="width:45px">
+                    </th>
+                    <th>Kunde
+                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders.customerName">
+                    </th>
                     <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
-                    <th><span translate>Bezahlt</span></th>
+                    <th><span translate>Status</span><br>
+                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.open" ng-true-value="'offen'" ng-false-value="''" />Offen</label><br>
+                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.payed"  ng-true-value="'bezahlt'" ng-false-value="''" />Bezahlt</label>
+                    </th>
+                    <th><span translate>Storno</span></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr ng-repeat="order in orders| orderBy:'timestamp':false | filter: queryOrders" ng-click="loadOrder(order)">
+            <tbody style="cursor:pointer">
+                
+                <tr ng-repeat="order in orders| orderBy:'timestamp':false | filter:queryOrders | checkStateFilter:checkState" ng-click="loadOrder(order)">
                     <td>{{order.timestamp | date:'dd.MM.yy - HH:mm:ss' }}</td>
                     <td><span ng-repeat="offer in order.offers">{{offer.count}}x {{offer.order.title}},&nbsp;</span></td>
                     <td>{{order.table}}</td>
                     <td>{{order.customerName}}</td>
                     <td>€</td>
-                    <td>{{getStatus(order)}}</td>
+                    <td>{{order.status}}</td>
+                    <td ng-click="$event.stopPropagation()" style="cursor:default">
+                        <button class="btn btn-danger" ng-click="deleteOrder(order)"><span class="glyphicon glyphicon-remove"></span></button>
+                    </td>
                 </tr>
             </tbody>
         </table>
         <button class="btn btn-primary" ng-click="newOrder()">Neu</button>
     </div>
-
 </div>

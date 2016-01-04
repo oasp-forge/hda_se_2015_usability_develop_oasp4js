@@ -81,14 +81,13 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
          * That means it returns an order, that contains just ids and primitive datatypes.
          *
          * @param {type} order
-         * @returns {orders.service_L7.$get.self.convertOrderIdsToObjects.fullOrder}
          */
         self.convertOrderObjectsToIds = function (order) {
             var idOrder = {
                 customerId: null,
                 customerName: null,
                 timestamp: Date.now(),
-                table: 1,
+                table: null,
                 offers: []
             };
 
@@ -116,7 +115,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 name: customer.name
             };
             return idCustomer;
-        }
+        };
 
 
         return {

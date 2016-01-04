@@ -68,19 +68,23 @@
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;  
 
-    cursor: pointer;
+
     thead {
         cursor: default;
     }
 }
-.orderMgmt .raiseTable tbody tr:hover td{
-    background-color: lightgreen !important;
-
+.orderMgmt .raiseTable tbody {
+    cursor: pointer;
+    tr:hover td{
+        background-color: lightgreen !important;
+    }
 }
 
-.orderMgmt .lowerTable tbody tr:hover td{
-    background-color: lightsalmon !important;
-
+.orderMgmt .lowerTable {
+    cursor: pointer;
+    tbody tr:hover td{
+        background-color: lightsalmon !important;
+    }
 }
 
 //Kategorien (Accordion) in Übersicht
@@ -109,5 +113,24 @@
 .orderMgmt .overviewTable {
     th {
         vertical-align: top;
+    }
+}
+
+@btnCountWidth: 30px;
+@inputCountWidth: 25px;
+.orderMgmt .counter {
+    width: auto;
+    min-width:2*@btnCountWidth+@inputCountWidth+20;
+    button {
+        float:left;
+        padding-left:0px;
+        padding-right:0px;
+        width: @btnCountWidth;
+    }
+    input {
+        padding:2px;
+        float:left;
+        width: @inputCountWidth;
+        text-align:center;
     }
 }

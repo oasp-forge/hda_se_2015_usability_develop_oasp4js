@@ -96,6 +96,11 @@ angular.module('app.order-mgmt').controller('OrderPaymentModalCtrl',
             $scope.getCategoryClassOnOrder = function (index) {
                 return 'category' + categoryOrderMap[index];
             }
+            
+            //Autosave on leaving State if Order changed
+            $scope.$on('$stateChangeStart', function (event) {
+                $modalInstance.dismiss('cancel');
+            });
 
             $scope.showPayedOrders = function () {
 

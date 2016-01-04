@@ -5,7 +5,7 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
 
             var self = this;
             self.model = {};
-
+            
             $scope.datePicker = {
                 dt: new Date(),
                 
@@ -26,19 +26,15 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
                     opened: false
                 }
             };
-
-            self.loadAllOrders = function () {
-                self.orders = orderFactory.loadAllOrders($scope.datePicker.dt);
-                $scope.orders = self.orders.orderObjects;
-                $scope.nextId = parseInt(self.orders.maxId) + 1;
+            
+            $scope.checkState = {
+                open: 'offen',
+                payed: ''
             };
-            self.loadAllOrders();
-
-            $scope.$watch('datePicker.dt', function (newArray) {
-                self.loadAllOrders();
-            }, true);
-
-            $scope.getStatus = function (order) {
+            
+            self.getStatus = function (order) {
+                if (!order.offers.length)
+                    return "Offen";
                 
                 var curStatus, payed = 0;
                 for (var i=0; i<order.offers.length; ++i){
@@ -55,6 +51,21 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
                     return "Ungültig";
             };
 
+            self.loadAllOrders = function () {
+                self.orders = orderFactory.loadAllOrders($scope.datePicker.dt);
+                $scope.orders = self.orders.orderObjects;
+                $scope.nextId = parseInt(self.orders.maxId) + 1;
+                angular.forEach($scope.orders, function(order){
+                    order.status = self.getStatus(order);
+                });
+            };
+            self.loadAllOrders();
+
+            $scope.$watch('datePicker.dt', function (newArray) {
+                self.loadAllOrders();
+            }, true);
+
+            
             $scope.newOrder = function () {
                 $state.go('orderMgmt.order', {orderId: $scope.nextId});
             };
@@ -63,21 +74,13 @@ angular.module('app.order-mgmt').controller('OrderOverviewCntl',
                 orderFactory.deleteAllOrders();
                 self.loadAllOrders();
             };
+            
+            $scope.deleteOrder = function (order) {
+                orderFactory.deleteOrder(order);
+                self.loadAllOrders();
+            };
 
             $scope.loadOrder = function (order) {
                 $state.go('orderMgmt.order', {orderId: order.id});
-            };
-
-            $scope.deleteFromOrder = function (offer) {
-                for (var i = 0; i < $scope.selOffers.length; ++i) {
-                    if (offer === $scope.selOffers[i]) {
-                        if ($scope.selOffers[i].count > 1)
-                            $scope.selOffers[i].count--;
-                        else
-                            $scope.selOffers.splice(i, 1);
-                        break;
-                    }
-                }
-                //alert(offer.desc + " hinzugefügt !");
             };
         });

@@ -1,7 +1,7 @@
 <div class="orderMgmt">
     <div class="row">
-        
-        
+
+
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -19,7 +19,7 @@
 
             </div>
             <div class="col-md-9">
-                <h4>Auswahlkategorie: <b>{{+curOrderCategories.title}}</b></h4>
+                <h4>Auswahlkategorie: <b>{{curOrderCategories.title}}</b></h4>
                 <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOffer"
                        placeholder="Search...">
                 <table class="table table-hover raiseTable">
@@ -34,7 +34,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="offer in offers| filter:queryOffer | filter:categoryFilter" ng-click="addToOrder(offer)">
+                        <tr ng-repeat="offer in offers| offerFilter:queryOffer | filter:categoryFilter" ng-click="addToOrder(offer)">
                             <td>{{offer.id}}</td>
                             <td>{{offer.title}}<br><span style="font-size: 8pt">{{offer.desc}}</span></td>
                             <td>{{offer.price| priceEuro}}</td>
@@ -45,19 +45,20 @@
         </div>
         <div class="col-md-6">
             <div class="col-md-12"><h2>Bestellung</h2></div>
-        <div class="col-md-4">Tisch-Nr.: 
-            <select class="form-control" ng-model="order.table" size="1" style="width:50%;float:right"> 
-                <option ng-repeat="table in tables">{{table}}</option> 
-            </select>
-        </div>
-        <div class="col-md-4">Letzte Änderung:<br> {{order.timestamp| date:'dd.MM.yy - HH:mm' | timestamp }}</div>
-        <div class="col-md-4">
-            <button class="btn btn-default" ng-click="setCustomer()">Kunde {{order.customer| customer}} zuordnen
-            </button>
-        </div>
-            <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrder"
+            <div class="col-md-4">Tisch-Nr.: 
+                <select class="form-control" ng-model="order.table" size="1" style="width:50%;float:right"> 
+                    <option ng-repeat="table in tables">{{table}}</option> 
+                </select>
+            </div>
+            <div class="col-md-4">Letzte Änderung:<br> {{order.timestamp| date:'dd.MM.yy - HH:mm' | timestamp }}</div>
+            <div class="col-md-4">
+                <button class="btn btn-default" ng-click="setCustomer()">Kunde {{order.customer| customer}} zuordnen
+                </button>
+            </div>
+            <input type="text" class="form-control" id="overviewSearchDescription" 
+                   ng-model="queryOrder"
                    placeholder="Search...">
-            <table class="table table-hover lowerTable">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Anz.</th>
@@ -70,21 +71,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="offer in order.offers| filter:queryOrder | orderBy:'order.title' track by $index"
-                        ng-click="deleteFromOrder(offer)">
-                        <td>{{offer.count}}</td>
+                    <tr ng-repeat="offer in order.offers| offerFilter:queryOrder | orderBy:'order.title' track by $index">
+                        <td class="counter">
+                            <button class="btn btn-default" ng-click="raiseOfferCount(offer, -1)">-</button>
+                            <input type="text" class="form-control" ng-model="offer.count"/>
+                            <button class="btn btn-default" ng-click="raiseOfferCount(offer, 1)">+</button>
+                        </td>
                         <td>{{offer.order.id}}</td>
                         <td>{{offer.order.title}}<br><span style="font-size: 8pt">{{offer.order.desc}}</span></td>
-                        <td>{{offer.order.price| priceEuro}}</td>
+                        <td>{{offer.order.price| priceEuro}}<br>
+                            <span style="font-size: 8pt">({{offer.order.price * offer.count| priceEuro}})</span>
+                        </td>
                         <td>{{getStatus(offer)}}</td>
                     </tr>
                 </tbody>
             </table>
             <div class="col-md-4">Gesamtpreis: {{orderPrice| priceEuro}}</div>
             <div class="col-md-4">Verbleibender Preis: {{leftPrice| priceEuro}}</div>
-            <button class="btn btn-primary col-md-4" ng-click="payOrder()">Bezahlen...</button>
+            <div class="col-md-4"><button class="btn btn-primary" ng-click="payOrder()" style="float:right">Bezahlen...</div>
+            <div class="row">
+                <div class="col-md-12" style="padding-top:20px">
+                    <button class="btn btn-primary" ng-click="saveOrder()">Speichern und Zurück</button>
+                    <button class="btn btn-default" ng-click="discardOrder()">Verwerfen und Zurück</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<button class="btn btn-primary" ng-click="saveOrder()">Bestellung speichern</button>
-<button class="btn btn-danger" ng-click="deleteOrder()">Bestellung löschen</button>

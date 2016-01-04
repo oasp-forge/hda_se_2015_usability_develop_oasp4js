@@ -4,58 +4,64 @@
             <div class="row">
                 <div class="col-md-6">
                     <h3><u>Noch zu bezahlen</u></h3>
-                    <table class="table table-hover col-md-6 raiseTable">
+                    <table class="table table-hover col-md-6">
                         <thead>
                             <tr>
                                 <th>Anz.</th>
                                 <th>#</th>
                                 <th>
                                     <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrder" placeholder="Search...">
+                                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryBill" placeholder="Search...">
                                 </th>
                                 <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
-                                <th><span translate>ORDER_MGMT.TABLE.STATUS</span></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="offer in order.offers| filter:queryOrder | filter: billFilter | orderBy:'order.desc' track by $index" ng-click="raiseCurBill(offer)">
-                                <td>{{calcNumBill(offer)}}</td>
+                            <tr ng-repeat="offer in order.offers| offerFilter:queryBill | filter: billFilter | orderBy:'order.desc' track by $index">
+
+                                <td><b>{{calcNumBill(offer)}}</b></td>
                                 <td>{{offer.order.id}}</td>
                                 <td>{{offer.order.title}}</td>
                                 <td>{{offer.order.price| priceEuro}}</td>
                                 <td>
+                                    <button class="btn btn-default" ng-click="raiseCurBill(offer)"><span class="glyphicon glyphicon-arrow-right"></span></button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="col-md-12">Gesamtpreis: {{billPrice| priceEuro}}</div>
+                    <div class="col-md-12">Gesamtpreis: <b>{{billPrice| priceEuro}}</b></div>
                 </div>
                 <div class="col-md-6">
                     <h3><u>aktuelle Rechnung</u></h3>
-                    <table class="table table-hover col-md-6 lowerTable">
+                    <table class="table table-hover col-md-6">
                         <thead>
                             <tr>
+                                <th>
                                 <th>Anz.</th>
                                 <th>#</th>
                                 <th>
                                     <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrder" placeholder="Search...">
+                                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryCurBill" placeholder="Search...">
                                 </th>
                                 <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
-                                <th><span translate>ORDER_MGMT.TABLE.STATUS</span></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="offer in order.offers| filter:queryOrder | filter: curBillFilter | orderBy:'order.desc' track by $index" ng-click="lowerCurBill(offer)">
-                                <td>{{offer.curBill}}</td>
+                            <tr ng-repeat="offer in order.offers| offerFilter:queryCurBill | filter: curBillFilter | orderBy:'order.desc' track by $index">
+                                <td>
+                                    <button class="btn btn-default" ng-click="lowerCurBill(offer)"><span class="glyphicon glyphicon-arrow-left"></span></button>
+                                </td>
+                                <td><b>{{offer.curBill}}</b></td>
                                 <td>{{offer.order.id}}</td>
                                 <td>{{offer.order.title}}</td>
-                                <td>{{offer.order.price| priceEuro}}</td>
-                                <td>
+                                <td>{{offer.order.price| priceEuro}}<br>
+                                    <span style="font-size: 8pt">({{offer.order.price * offer.curBill| priceEuro}})</span></td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="col-md-12">Gesamtpreis: {{curBillPrice| priceEuro}}</div>
-                    <button class="btn btn-primary" ng-click="payCurBill()">Bezahlen</button>
+                    <div class="col-md-12">Gesamtpreis: <b>{{curBillPrice| priceEuro}}</b>&nbsp;<button class="btn btn-primary" ng-click="payCurBill()" style="float:right">Bezahlen</button></div>
+                    
                 </div>
             </div>
         </tab>
@@ -63,36 +69,39 @@
         <tab heading="Bezahlte Bestellungen">
             <div class="row">
                 <div class="col-md-6">
-                    <table class="table table-hover col-md-6 lowerTable">
+                    <table class="table table-hover col-md-6">
                         <thead>
                             <tr>
                                 <th>Anz.</th>
                                 <th>#</th>
                                 <th>
                                     <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrder" placeholder="Search...">
+                                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryPayed" placeholder="Search...">
                                 </th>
                                 <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
-                                <th><span translate>ORDER_MGMT.TABLE.STATUS</span></th>
+                                <th><span translate>Storno</span></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="offer in order.offers| filter:queryOrder | filter: payedFilter | orderBy:'order.desc' track by $index" ng-click="lowerPayed(offer)">
+                            <tr ng-repeat="offer in order.offers| filter:queryPayed | filter: payedFilter | orderBy:'order.desc' track by $index">
                                 <td>{{offer.payed}}</td>
                                 <td>{{offer.order.id}}</td>
                                 <td>{{offer.order.title}}</td>
-                                <td>{{offer.order.price| priceEuro}}</td>
+                                <td>{{offer.order.price| priceEuro}}<br>
+                                    <span style="font-size: 8pt">({{offer.order.price * offer.payed| priceEuro}})</span>
+                                </td>
                                 <td>
+                                    <button class="btn btn-danger" ng-click="lowerPayed(offer)"><span class="glyphicon glyphicon-remove"></span></button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="col-md-12">Gesamtpreis: {{payedPrice| priceEuro}}</div>
+                    <div class="col-md-12">Gesamtpreis: <b>{{payedPrice| priceEuro}}</b></div>
                 </div>
 
 
-                
+
             </div>
         </tab>
     </tabset>
-    <button class="btn btn-default" ng-click="ok()">Ok</button>
 </div>

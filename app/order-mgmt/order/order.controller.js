@@ -7,6 +7,7 @@ angular.module('app.order-mgmt').controller('OrderCntl',
 
         $scope.offers = orderFactory.offerList();
         $scope.order = orderFactory.loadOrder($stateParams.orderId);
+        self.orderAtEnterState = angular.copy($scope.order);
 
         $scope.tables = [1,2,3,4,5,6];
         $scope.orderCategories = [
@@ -98,14 +99,21 @@ angular.module('app.order-mgmt').controller('OrderCntl',
             }
             $scope.leftPrice = $scope.orderPrice - payedPrice;
         }, true);
+        
+        self.doNotSaveOnChangeState = false;
+        //Autosave on leaving State if Order changed
+        $scope.$on('$stateChangeStart', function (event) {
+            if (!angular.equals($scope.order, self.orderAtEnterState) && !self.doNotSaveOnChangeState){
+                orderFactory.saveOrder($scope.order);
+            }
+        });
 
         $scope.saveOrder = function () {
-            orderFactory.saveOrder($scope.order);
             $state.go('orderMgmt.overview');
         };
         
-        $scope.deleteOrder = function () {
-            orderFactory.deleteOrder($scope.order);
+        $scope.discardOrder = function () {
+            self.doNotSaveOnChangeState = true;
             $state.go('orderMgmt.overview');
         };
 
@@ -122,6 +130,22 @@ angular.module('app.order-mgmt').controller('OrderCntl',
                 $scope.order.offers.push({count: 1, order: offer});
             //alert(offer.desc + " hinzugefügt !");
         };
+        
+        $scope.raiseOfferCount = function (offer, count){
+            var newCount;
+            for (var i = 0; i < $scope.order.offers.length; ++i) {
+                if (offer === $scope.order.offers[i]) {
+                    newCount = $scope.order.offers[i].count + count;
+                    if ($scope.order.offers[i].payed <= newCount || !$scope.order.offers[i].payed) {
+                        if (newCount >= 1)
+                            $scope.order.offers[i].count = newCount;
+                        else
+                            $scope.order.offers.splice(i, 1);
+                    }
+                    break;
+                }
+            }
+        }
 
         $scope.deleteFromOrder = function (offer) {
             for (var i = 0; i < $scope.order.offers.length; ++i) {
@@ -157,6 +181,7 @@ angular.module('app.order-mgmt').controller('OrderCntl',
                 templateUrl: 'order-mgmt/order-payment/order-payment-modal.html',
                 controller: 'OrderPaymentModalCtrl',
                 size: 'lg',
+                backdrop: true,
                 resolve: {
                     order: function () {
                         return $scope.order;
