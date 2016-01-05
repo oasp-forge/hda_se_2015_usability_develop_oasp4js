@@ -1,13 +1,15 @@
 angular.module('app.order-mgmt').controller('OrderCustomerCntl',
     function ($scope, $modalInstance, orderFactory, $stateParams) {
         "use strict";
+        
+        var self = this;
 
-        self.loadAllOrders = function () {
+        self.loadAllCustomers = function () {
             self.customers = orderFactory.loadAllCustomers();
             $scope.customers = self.customers.customerObjects;
         };
-        self.loadAllOrders();
-
+        self.loadAllCustomers();
+        
         $scope.order = orderFactory.loadOrder($stateParams.orderId);
 
         $scope.ok = function () {
@@ -15,21 +17,19 @@ angular.module('app.order-mgmt').controller('OrderCustomerCntl',
         };
 
         $scope.saveCustomer = function () {
-            if ($scope.customers) {
-                $scope.newCustomer.id = parseInt($scope.customers.maxId) + 1;
-            }
-            orderFactory.saveCustomer($scope.newCustomer);
-            $scope.customers = orderFactory.loadAllCustomers();
+            var newId = parseInt(self.customers.maxId) + 1;
+            var newCustomer = {"id": newId, "name": $scope.newCustomer.name};
+            //alert(JSON.stringify(newCustomer));
+            orderFactory.saveCustomer(newCustomer);
+            self.loadAllCustomers();
         };
 
         $scope.deleteAllCustomers = function(){
             orderFactory.deleteAllCustomers();
             $scope.customers = orderFactory.loadAllCustomers();
-        }
+        };
 
         $scope.selectCustomerForOrder = function(customer){
-            $scope.order.customerId = customer.id;
-            $scope.order.customerName = customer.name;
-            orderFactory.saveOrder($scope.order);
-        }
+            $modalInstance.close(customer);
+        };
     });

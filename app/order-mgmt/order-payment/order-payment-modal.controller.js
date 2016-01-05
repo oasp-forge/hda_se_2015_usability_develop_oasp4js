@@ -53,8 +53,18 @@ angular.module('app.order-mgmt').controller('OrderPaymentModalCtrl',
                 }
             };
             
+            
             $scope.calcNumBill = function(offer) {
                 return offer.count - offer.curBill - offer.payed;
+            };
+            
+            $scope.payAll = function() {
+                for (var i=0; i<$scope.order.offers.length; ++i){
+                    if (!$scope.order.offers[i].payed)
+                        $scope.order.offers[i].payed = 0;
+                    $scope.order.offers[i].payed += $scope.calcNumBill($scope.order.offers[i]);
+                    //$scope.order.offers[i].curBill = 0;
+                }
             };
             
             //Gesamtpreis überwachen
@@ -95,30 +105,10 @@ angular.module('app.order-mgmt').controller('OrderPaymentModalCtrl',
             };
             $scope.getCategoryClassOnOrder = function (index) {
                 return 'category' + categoryOrderMap[index];
-            }
+            };
             
             //Autosave on leaving State if Order changed
             $scope.$on('$stateChangeStart', function (event) {
                 $modalInstance.dismiss('cancel');
             });
-
-            $scope.showPayedOrders = function () {
-
-                var modalInstance = $modal.open({
-                    animation: true,
-                    templateUrl: 'order-mgmt/order-payment/order-payment-payedOrders-modal.html',
-                    controller: 'OrderPaymentPayedOrdersModalCtrl',
-                    size: 'sm',
-                    resolve: {
-                        order: function () {
-                            return $scope.order;
-                        }
-                    }
-                });
-                modalInstance.result.then(function (selectedItem) {
-                    $scope.test = selectedItem;
-                }, function () {
-                    $log.info('Modal dismissed at: ' + new Date());
-                });
-            };
         });

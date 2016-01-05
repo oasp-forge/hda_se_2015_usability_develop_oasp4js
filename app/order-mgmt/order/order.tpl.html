@@ -19,7 +19,7 @@
 
             </div>
             <div class="col-md-9">
-                <h4>Auswahlkategorie: <b>{{curOrderCategories.title}}</b></h4>
+                <h4 style="height:35px">Auswahlkategorie: <b>{{curOrderCategories.title}}</b></h4>
                 <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOffer"
                        placeholder="Search...">
                 <table class="table table-hover raiseTable">
@@ -37,7 +37,7 @@
                         <tr ng-repeat="offer in offers| offerFilter:queryOffer | filter:categoryFilter" ng-click="addToOrder(offer)">
                             <td>{{offer.id}}</td>
                             <td>{{offer.title}}<br><span style="font-size: 8pt">{{offer.desc}}</span></td>
-                            <td>{{offer.price| priceEuro}}</td>
+                            <td nowrap>{{offer.price| priceEuro}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -52,8 +52,9 @@
             </div>
             <div class="col-md-4">Letzte Änderung:<br> {{order.timestamp| date:'dd.MM.yy - HH:mm' | timestamp }}</div>
             <div class="col-md-4">
-                <button class="btn btn-default" ng-click="setCustomer()">Kunde {{order.customer| customer}} zuordnen
-                </button>
+                Kunde: {{order.customer | customer}}<br>
+                <button class="btn btn-default" ng-click="setCustomer()">Kunde zuordnen</button>
+                
             </div>
             <input type="text" class="form-control" id="overviewSearchDescription" 
                    ng-model="queryOrder"
@@ -74,12 +75,12 @@
                     <tr ng-repeat="offer in order.offers| offerFilter:queryOrder | orderBy:'order.title' track by $index">
                         <td class="counter">
                             <button class="btn btn-default" ng-click="raiseOfferCount(offer, -1)">-</button>
-                            <input type="text" class="form-control" ng-model="offer.count"/>
+                            <input type="text" class="form-control" ng-model="offer.count" />
                             <button class="btn btn-default" ng-click="raiseOfferCount(offer, 1)">+</button>
                         </td>
                         <td>{{offer.order.id}}</td>
                         <td>{{offer.order.title}}<br><span style="font-size: 8pt">{{offer.order.desc}}</span></td>
-                        <td>{{offer.order.price| priceEuro}}<br>
+                        <td nowrap>{{offer.order.price| priceEuro}}<br>
                             <span style="font-size: 8pt">({{offer.order.price * offer.count| priceEuro}})</span>
                         </td>
                         <td>{{getStatus(offer)}}</td>
@@ -87,7 +88,7 @@
                 </tbody>
             </table>
             <div class="col-md-4">Gesamtpreis: {{orderPrice| priceEuro}}</div>
-            <div class="col-md-4">Verbleibender Preis: {{leftPrice| priceEuro}}</div>
+            <div class="col-md-4">Offen: {{leftPrice| priceEuro}}</div>
             <div class="col-md-4"><button class="btn btn-primary" ng-click="payOrder()" style="float:right">Bezahlen...</div>
             <div class="row">
                 <div class="col-md-12" style="padding-top:20px">

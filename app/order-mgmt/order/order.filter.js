@@ -1,11 +1,11 @@
 angular.module('app.order-mgmt')
     .filter('customer', function () {
         'use strict';
-        return function (item) {
-            if (!item)
-                return "";
+        return function (customer) {
+            if (!customer)
+                return "-";
             else
-                return item;
+                return customer.name;
         };
     })
     .filter('timestamp', function () {

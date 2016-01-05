@@ -27,12 +27,12 @@
                         <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders.table" style="width:45px">
                     </th>
                     <th>Kunde
-                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders.customerName">
+                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders.customer.name">
                     </th>
                     <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
-                    <th><span translate>Status</span><br>
-                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.open" ng-true-value="'offen'" ng-false-value="''" />Offen</label><br>
-                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.payed"  ng-true-value="'bezahlt'" ng-false-value="''" />Bezahlt</label>
+                    <th nowrap><span translate>Status</span><br>
+                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.open" ng-true-value="'offen'" ng-false-value="''" /> Offen</label><br>
+                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.payed"  ng-true-value="'bezahlt'" ng-false-value="''" /> Bezahlt</label>
                     </th>
                     <th><span translate>Storno</span></th>
                 </tr>
@@ -43,8 +43,8 @@
                     <td>{{order.timestamp | date:'dd.MM.yy - HH:mm:ss' }}</td>
                     <td><span ng-repeat="offer in order.offers">{{offer.count}}x {{offer.order.title}},&nbsp;</span></td>
                     <td>{{order.table}}</td>
-                    <td>{{order.customerName}}</td>
-                    <td>{{getPrice(order) | priceEuro}}</td>
+                    <td>{{order.customer.name}}</td>
+                    <td nowrap>{{getPrice(order) | priceEuro}}</td>
                     <td>{{order.status}}</td>
                     <td ng-click="$event.stopPropagation()" style="cursor:default">
                         <button class="btn btn-danger" ng-click="deleteOrder(order)"><span class="glyphicon glyphicon-remove"></span></button>

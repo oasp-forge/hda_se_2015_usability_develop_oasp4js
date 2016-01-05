@@ -109,6 +109,7 @@ angular.module('app.order-mgmt').controller('OrderCntl',
         });
 
         $scope.saveOrder = function () {
+            orderFactory.saveOrder($scope.order);
             $state.go('orderMgmt.overview');
         };
         
@@ -135,7 +136,7 @@ angular.module('app.order-mgmt').controller('OrderCntl',
             var newCount;
             for (var i = 0; i < $scope.order.offers.length; ++i) {
                 if (offer === $scope.order.offers[i]) {
-                    newCount = $scope.order.offers[i].count + count;
+                    newCount = parseInt($scope.order.offers[i].count) + parseInt(count);
                     if ($scope.order.offers[i].payed <= newCount || !$scope.order.offers[i].payed) {
                         if (newCount >= 1)
                             $scope.order.offers[i].count = newCount;
@@ -145,8 +146,8 @@ angular.module('app.order-mgmt').controller('OrderCntl',
                     break;
                 }
             }
-        }
-
+        };
+        
         $scope.deleteFromOrder = function (offer) {
             for (var i = 0; i < $scope.order.offers.length; ++i) {
                 if (offer === $scope.order.offers[i]) {
@@ -210,7 +211,7 @@ angular.module('app.order-mgmt').controller('OrderCntl',
             });
 
             modalInstance.result.then(function (selectedItem) {
-                $scope.selected = selectedItem;
+                $scope.order.customer = selectedItem;
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });

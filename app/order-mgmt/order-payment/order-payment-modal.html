@@ -4,6 +4,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <h3><u>Noch zu bezahlen</u></h3>
+                    <div class="col-md-12" style="padding-bottom:5px">Gesamtpreis: <b>{{billPrice| priceEuro}}</b>&nbsp;<button class="btn btn-primary" ng-click="payAll()" style="float:right">Bezahlen</button></div>
+                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryBill" placeholder="Search...">
                     <table class="table table-hover col-md-6">
                         <thead>
                             <tr>
@@ -11,7 +13,7 @@
                                 <th>#</th>
                                 <th>
                                     <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryBill" placeholder="Search...">
+                                    
                                 </th>
                                 <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
                                 <th></th>
@@ -30,10 +32,11 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="col-md-12">Gesamtpreis: <b>{{billPrice| priceEuro}}</b></div>
                 </div>
                 <div class="col-md-6">
                     <h3><u>aktuelle Rechnung</u></h3>
+                    <div class="col-md-12" style="padding-bottom:5px">Gesamtpreis: <b>{{curBillPrice| priceEuro}}</b>&nbsp;<button class="btn btn-primary" ng-click="payCurBill()" style="float:right">Bezahlen</button></div>
+                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryCurBill" placeholder="Search...">
                     <table class="table table-hover col-md-6">
                         <thead>
                             <tr>
@@ -42,7 +45,7 @@
                                 <th>#</th>
                                 <th>
                                     <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryCurBill" placeholder="Search...">
+                                    
                                 </th>
                                 <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
                             </tr>
@@ -60,8 +63,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="col-md-12">Gesamtpreis: <b>{{curBillPrice| priceEuro}}</b>&nbsp;<button class="btn btn-primary" ng-click="payCurBill()" style="float:right">Bezahlen</button></div>
-                    
                 </div>
             </div>
         </tab>
@@ -69,6 +70,7 @@
         <tab heading="Bezahlte Bestellungen">
             <div class="row">
                 <div class="col-md-6">
+                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryPayed" placeholder="Search...">
                     <table class="table table-hover col-md-6">
                         <thead>
                             <tr>
@@ -76,7 +78,7 @@
                                 <th>#</th>
                                 <th>
                                     <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
-                                    <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryPayed" placeholder="Search...">
+                                    
                                 </th>
                                 <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
                                 <th><span translate>Storno</span></th>
