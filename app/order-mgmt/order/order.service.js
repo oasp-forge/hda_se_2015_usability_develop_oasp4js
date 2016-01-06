@@ -4,38 +4,36 @@
  * @module app.offer-mgmt
  * @requires offer-mgmt.offerManagementRestService
  */
-angular.module('app.order-mgmt').factory('orderFactory2', function (ORDER_STORAGE) {
+angular.module('app.order-mgmt').factory('oldOrderMerger', function () {
     'use strict';
+    var order;
     return {
-        /**
-         * @ngdoc method
-         * @name offer-mgmt.offers#loadAllOffers
-         * @methodOf offer-mgmt.offers
-         *
-         * @return {promise} promise
-         */
-        saveOrder: function (id, order) {
-            var allOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
-            if (!allOrders)
-                allOrders = {};
-            
-            allOrders[id] = order;
-            localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
+        registerOrder: function (_order) {
+            order = _order;
         },
-        /**
-         * @ngdoc method
-         * @name offer-mgmt.offers#loadAllProducts
-         * @methodOf offer-mgmt.offers
-         *
-         * @return {promise} promise
-         */
-        loadOrder: function (id) {
-            //alert(JSON.parse(localStorage.getItem(ORDER_STORAGE))[id]);
+        addOffersFromOrder: function (_order) {
+            var _offer, offer;
+            var _offersLength = _order.offers.length, offersLength = order().offers.length;
+            var raised;
             
-            if (localStorage.getItem(ORDER_STORAGE) !== null)
-                return JSON.parse(localStorage.getItem(ORDER_STORAGE))[id];
-            else
-                return null;
+            for (var i = 0; i < _offersLength; ++i) {
+                _offer = _order.offers[i];
+                for (var k = 0; k < offersLength; ++k) {
+                    offer = order().offers[k];
+                    
+                    if (angular.equals(offer.order.id, _offer.order.id)) {
+                        offer.count += _offer.count;
+                        raised = true;
+                        break;
+                    }
+                }
+                if (raised) {
+                    raised = false;
+                } else {
+                    _offer.payed = null;
+                    order().offers = order().offers.concat(_offer);
+                }
+            }
         }
     };
 });

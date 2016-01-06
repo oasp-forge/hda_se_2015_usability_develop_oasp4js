@@ -4,6 +4,8 @@ angular.module('app.order-mgmt')
         return function (customer) {
             if (!customer)
                 return "-";
+            else if (!customer.name)
+                return "gelöscht";
             else
                 return customer.name;
         };

@@ -1,0 +1,28 @@
+<div class="modal-body orderMgmt">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Alte Bestellung von Kunde {{customerName}} hinzufügen</h3>
+            <table class="table table-hover overviewTable">
+                <thead>
+                    <tr>
+                        <th>
+                            Datum
+                        </th>
+                        <th>
+                            <span translate>Bestellung</span>
+                        </th>
+                        <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
+                    </tr>
+                </thead>
+                <tbody style="cursor:pointer">
+
+                    <tr ng-repeat="order in orders| orderBy:'timestamp':true" ng-click="addOrder(order)">
+                        <td>{{order.timestamp| date:'dd.MM.yy' }}</td>
+                        <td><span ng-repeat="offer in order.offers">{{offer.count}}x {{offer.order.title}},&nbsp;</span></td>
+                        <td nowrap>{{getPrice(order) | priceEuro}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

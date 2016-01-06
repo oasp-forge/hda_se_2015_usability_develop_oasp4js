@@ -1,5 +1,5 @@
 angular.module('app.order-mgmt').controller('OrderCntl',
-    function ($filter, $scope, $sce, $stateParams, orderFactory, globalSpinner, positionStateNotification, $state, $modal) {
+    function ($filter, $scope, $sce, $stateParams, orderFactory, globalSpinner, oldOrderMerger, $state, $modal) {
         'use strict';
 
         var self = this;
@@ -8,6 +8,11 @@ angular.module('app.order-mgmt').controller('OrderCntl',
         $scope.offers = orderFactory.offerList();
         $scope.order = orderFactory.loadOrder($stateParams.orderId);
         self.orderAtEnterState = angular.copy($scope.order);
+        //alert(JSON.stringify($scope.order));
+        
+        oldOrderMerger.registerOrder(function(){
+            return $scope.order;
+        });
 
         $scope.tables = [1,2,3,4,5,6];
         $scope.orderCategories = [
@@ -200,9 +205,10 @@ angular.module('app.order-mgmt').controller('OrderCntl',
         $scope.setCustomer = function () {
             var modalInstance = $modal.open({
                 animation: true,
-                templateUrl: 'order-mgmt/order-customer/order-customer.html',
+                templateUrl: 'order-mgmt/order-customer/order-customer.modal.html',
                 controller: 'OrderCustomerCntl',
                 size: '1g',
+                backdrop: true,
                 resolve: {
                     order: function () {
                         return $scope.order;

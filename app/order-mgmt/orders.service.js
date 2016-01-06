@@ -169,7 +169,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
             /**
              * Returns all orders (expanded), stored in localStorage.
              */
-            loadAllOrders: function (date) {
+            loadAllOrders: function (date, customerId) {
                 var orders = {maxId: -1, orderObjects: null};
                 orders.orderObjects = JSON.parse(localStorage.getItem(ORDER_STORAGE));
                 if (orders.orderObjects) {
@@ -177,6 +177,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                     var orderObjArray = [];
                     var tempDate;
                     var sameDate;
+                    var sameCustomer;
                     for (var i = 0; i < keys.length; ++i) {
                         //orders.orderObjects[parseInt(keys[i])] = self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]);
                         if (date) {
@@ -189,7 +190,23 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                             else
                                 sameDate = false;
                         }
-                        if (sameDate || !date) {
+                        else
+                            sameDate = true;
+                        
+                        if (customerId){
+                            if (orders.orderObjects[keys[i]].customer){
+                                if (parseInt(customerId) === parseInt(orders.orderObjects[keys[i]].customer))
+                                    sameCustomer = true;
+                                else
+                                    sameCustomer = false;
+                            }
+                            else
+                                sameCustomer = false;
+                        }
+                        else
+                            sameCustomer = true;
+                        
+                        if (sameDate && sameCustomer) {
                             orderObjArray.push(self.convertOrderIdsToObjects(orders.orderObjects[keys[i]], keys[i]));
                         }
 
@@ -216,6 +233,28 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                 localStorage.setItem(CUSTOMER_STORAGE, JSON.stringify(allCustomers));
             },
             
+            deleteCustomer: function (customer) {
+                var allCustomers = JSON.parse(localStorage.getItem(CUSTOMER_STORAGE));
+                if (!allCustomers)
+                    allCustomers = {};
+
+                delete allCustomers[customer.id];
+                localStorage.setItem(CUSTOMER_STORAGE, JSON.stringify(allCustomers));
+                
+                //Delete deleted customer from all Orders
+                var allOrders = JSON.parse(localStorage.getItem(ORDER_STORAGE));
+                if (!allOrders)
+                    allOrders = {};
+                var keys = Object.keys(allOrders);
+                for (var i = 0; i < keys.length; ++i) {
+                    if (angular.equals(allOrders[keys[i]].customer, customer.id)) {
+                        allOrders[keys[i]].customer = null;
+                    }
+                }
+
+                localStorage.setItem(ORDER_STORAGE, JSON.stringify(allOrders));
+            },
+            
             
             /**
              * Returns all customers from localStorage
@@ -228,7 +267,7 @@ angular.module('app.order-mgmt').provider('orderFactory', function () {
                     var customerObjArray = [];
                     for (var i = 0; i < keys.length; ++i) {
                         customerObjArray.push({"id":keys[i], "name":customers.customerObjects[keys[i]]});
-                        if (customers.maxId < keys[i]) {
+                        if (parseInt(customers.maxId) < parseInt(keys[i])) {
                             customers.maxId = keys[i];
                         }
                     }
