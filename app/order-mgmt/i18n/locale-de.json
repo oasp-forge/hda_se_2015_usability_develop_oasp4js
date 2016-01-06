@@ -5,13 +5,28 @@
         "SUBMIT": "Speichern",
         "CANCEL": "Abbrechen",
         "DETAILS": "Details zum Tabelle #",
+        "OFFER": "Angebot",
         "ORDER": "Bestellen",
+        "SELECTED_CATEGORY": "Ausgewählte Kategorie",
+        "TABLE_NO": "Tisch Nr.",
+        "LAST_CHANGES": "Letzte Änderungen",
+        "SAVE_AND_GO_BACK": "Speichern und zurück",
+        "DISCARD_AND_GO_BACK": "Verwerfen und zurück",
         "TABLE": {
             "DESCRIPTION": "Bezeichnung",
             "PRICE": "Preis",
             "STATUS": "Status",
             "STATE": "Zustand",
             "POSITIONS": "Sortieren Position:"
+        },
+        "CUSTOMER": {
+            "CUSTOMER": "Kunde",
+            "CUSTOMER_MANAGEMENT": "Kunden Verwaltung",
+            "NEW_CUSTOMER": "Neuer Kunde:",
+            "CREATE_CUSTOMER": "Kunden anlegen",
+            "SELECT_CUSTOMER": "Kunden auswählen",
+            "CUSTOMER_NAME": "Kundenname",
+            "DELETE_ALL_CUSTOMERS": "Alle Kunden löschen"
         },
         "NO_ORDER": "Keine Bestellung zur Zeit in dieser Tabelle zugeordnet.",
         "NEW_ORDER": "Vergeben Sie einen neuen Auftrag ...",
@@ -22,6 +37,17 @@
         "EDIT": "Bearbeiten",
         "FREE": "Frei",
         "ADD": "+Hinzufügen",
-        "REMOVE": "Herausnehmen"
+        "REMOVE": "Herausnehmen",
+        "SEARCH": "Suchen...",
+        "QUANTITY": "Anzahl",
+
+        "OVERVIEW": "Übersicht",
+        "ORDER_SUBJECT": "Bestellung",
+        "DATE": "Datum",
+        "TIME": "Uhrzeit",
+        "TABLE_OBJECT": "Tisch",
+        "OPEN": "Offen",
+        "PAYED": "Bezahlt",
+        "NEW": "Neu"
     }
 }

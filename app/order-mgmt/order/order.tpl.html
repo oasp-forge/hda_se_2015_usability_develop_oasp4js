@@ -5,7 +5,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="col-md-12"><h2>Angebot</h2></div>
+            <div class="col-md-12"><h2 translate>ORDER_MGMT.OFFER</h2></div>
             <div class="col-md-3">
                 <accordion close-others="true" class="orderMgmtCategories">
                     <accordion-group ng-repeat="cat in orderCategories" is-open="cat.open">
@@ -19,9 +19,9 @@
 
             </div>
             <div class="col-md-9">
-                <h4 style="height:35px">Auswahlkategorie: <b>{{curOrderCategories.title}}</b></h4>
+                <h4 style="height:35px"><span translate>ORDER_MGMT.SELECTED_CATEGORY</span>: <b>{{curOrderCategories.title}}</b></h4>
                 <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOffer"
-                       placeholder="Search...">
+                       placeholder="{{'ORDER_MGMT.SEARCH' | translate}}">
                 <table class="table table-hover raiseTable">
                     <thead>
                         <tr>
@@ -44,25 +44,25 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="col-md-12"><h2>Bestellung</h2></div>
-            <div class="col-md-4">Tisch-Nr.: 
+            <div class="col-md-12"><h2 translate>ORDER_MGMT.ORDER</h2></div>
+            <div class="col-md-4"><span translate>ORDER_MGMT.TABLE_NO</span>:
                 <select class="form-control" ng-model="order.table" size="1" style="width:50%;float:right"> 
                     <option ng-repeat="table in tables">{{table}}</option> 
                 </select>
             </div>
-            <div class="col-md-4">Letzte Änderung:<br> {{order.timestamp| date:'dd.MM.yy - HH:mm' | timestamp }}</div>
+            <div class="col-md-4"><span translate>ORDER_MGMT.LAST_CHANGES</span>:<br> {{order.timestamp| date:'dd.MM.yy - HH:mm' | timestamp }}</div>
             <div class="col-md-4">
-                Kunde: {{order.customer | customer}}<br>
-                <button class="btn btn-default" ng-click="setCustomer()">Kunde zuordnen</button>
+                <span translate>ORDER_MGMT.CUSTOMER.CUSTOMER</span>: {{order.customer | customer}}<br>
+                <button class="btn btn-default" ng-click="setCustomer()" translate>ORDER_MGMT.CUSTOMER.SELECT_CUSTOMER</button>
                 
             </div>
             <input type="text" class="form-control" id="overviewSearchDescription" 
                    ng-model="queryOrder"
-                   placeholder="Search...">
+                   placeholder="{{'ORDER_MGMT.SEARCH' | translate}}">
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Anz.</th>
+                        <th translate>ORDER_MGMT.QUANTITY</th>
                         <th>#</th>
                         <th>
                             <span translate>ORDER_MGMT.TABLE.DESCRIPTION</span>
@@ -92,8 +92,8 @@
             <div class="col-md-4"><button class="btn btn-primary" ng-click="payOrder()" style="float:right">Bezahlen...</div>
             <div class="row">
                 <div class="col-md-12" style="padding-top:20px">
-                    <button class="btn btn-primary" ng-click="saveOrder()">Speichern und Zurück</button>
-                    <button class="btn btn-default" ng-click="discardOrder()">Verwerfen und Zurück</button>
+                    <button class="btn btn-primary" ng-click="saveOrder()" translate>ORDER_MGMT.SAVE_AND_GO_BACK</button>
+                    <button class="btn btn-default" ng-click="discardOrder()" translate>ORDER_MGMT.DISCARD_AND_GO_BACK</button>
                 </div>
             </div>
         </div>

@@ -5,13 +5,28 @@
         "SUBMIT": "Submit",
         "CANCEL": "Cancel",
         "DETAILS": "Details for Table #",
+        "OFFER": "Offer",
         "ORDER": "Order",
+        "SELECTED_CATEGORY": "Selected category",
+        "TABLE_NO": "Table No.",
+        "LAST_CHANGES": "Last changes",
+        "SAVE_AND_GO_BACK": "Save and go back",
+        "DISCARD_AND_GO_BACK": "Discard and go back",
         "TABLE": {
             "DESCRIPTION": "Description",
             "PRICE": "Price",
             "STATUS": "Status",
             "STATE": "State",
             "POSITIONS": "Order Positions:"
+        },
+        "CUSTOMER": {
+            "CUSTOMER": "Customer",
+            "CUSTOMER_MANAGEMENT": "Customer management",
+            "NEW_CUSTOMER": "New customer:",
+            "CREATE_CUSTOMER": "Create customer",
+            "SELECT_CUSTOMER": "Select customer",
+            "CUSTOMER_NAME": "Customer name",
+            "DELETE_ALL_CUSTOMERS": "Delete all customers"
         },
         "POSITION": "Position:",
         "NO_ORDER": "No order currently assigned to this table. ",
@@ -22,6 +37,17 @@
         "OCCUPY": "Occupy",
         "FREE": "Free",
         "ADD": "+Add",
-        "REMOVE": "Remove"
+        "REMOVE": "Remove",
+        "SEARCH": "Search...",
+        "QUANTITY": "Quantity",
+
+        "OVERVIEW": "Overview",
+        "ORDER_SUBJECT": "Order",
+        "DATE": "Date",
+        "TIME": "Time",
+        "TABLE_OBJECT": "Table",
+        "OPEN": "Open",
+        "PAYED": "Payed",
+        "NEW": "New"
     }
 }

@@ -1,11 +1,11 @@
 <div class="row orderMgmt">
-    <div class="col-md-12"><h2>Übersicht</h2>
+    <div class="col-md-12"><h2 translate>ORDER_MGMT.OVERVIEW</h2>
         <button ng-click="deleteAllOrders()" ng-show="false">Alle Löschen</button>
         <table class="table table-hover overviewTable">
             <thead>
                 <tr>
                     <th>
-                        Datum/Uhrzeit
+                        <span translate>ORDER_MGMT.DATE</span>/<span translate>ORDER_MGMT.TIME</span>
                         <div class="input-group" style="width:125px">
                             <input type="text" 
                                    class="form-control" 
@@ -21,18 +21,20 @@
                         </div>
                     </th>
                     <th>
-                        <span translate>Bestellung</span>
+                        <span translate>ORDER_MGMT.ORDER_SUBJECT</span>
                     </th>
-                    <th>Tisch
+                    <th><span translate>ORDER_MGMT.TABLE_OBJECT</span>
                         <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders.table" style="width:45px">
                     </th>
-                    <th>Kunde
+                    <th><span translate>ORDER_MGMT.CUSTOMER.CUSTOMER</span>
                     <input type="text" class="form-control" id="overviewSearchDescription" ng-model="queryOrders.customer.name">
                     </th>
                     <th><span translate>ORDER_MGMT.TABLE.PRICE</span></th>
                     <th nowrap><span translate>Status</span><br>
-                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.open" ng-true-value="'offen'" ng-false-value="''" /> Offen</label><br>
-                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.payed"  ng-true-value="'bezahlt'" ng-false-value="''" /> Bezahlt</label>
+                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.open" ng-true-value="'offen'" ng-false-value="''" />
+                            <span translate>ORDER_MGMT.OPEN</span></label><br>
+                        <label style="font-size:8pt"><input type="checkbox" ng-model="checkState.payed"  ng-true-value="'bezahlt'" ng-false-value="''" />
+                            <span translate>ORDER_MGMT.PAYED</span></label>
                     </th>
                     <th><span translate>Storno</span></th>
                 </tr>
@@ -52,6 +54,6 @@
                 </tr>
             </tbody>
         </table>
-        <button class="btn btn-primary" ng-click="newOrder()">Neu</button>
+        <button class="btn btn-primary" ng-click="newOrder()" translate>ORDER_MGMT.NEW</button>
     </div>
 </div>
