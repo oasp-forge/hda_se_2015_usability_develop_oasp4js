@@ -4,6 +4,7 @@
  * @module app.offer-mgmt
  * @requires offer-mgmt.offerManagementRestService
  */
+
 angular.module('app.order-mgmt').factory('oldOrderMerger', function () {
     'use strict';
     var order;

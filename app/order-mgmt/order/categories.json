@@ -1,0 +1,33 @@
+[
+    {
+        "title": "Vorspeisen",
+        "content": {
+            "100": "Suppen",
+            "101": "Beilagen",
+            "102": "Salate"
+        }
+    },
+    {
+        "title": "Getränke",
+        "content": {
+            "200": "Alkoholfrei",
+            "201": "Aperitiv"
+        }
+    },
+    {
+        "title": "Hauptspeisen",
+        "content": {
+            "300": "Schnitzel",
+            "301": "Rind",
+            "302": "Lamm",
+            "303": "Fisch"
+        }
+    },
+    {
+        "title": "Desserts",
+        "content": {
+            "400": "Eis",
+            "401": "Pudding"
+        }
+    }
+]

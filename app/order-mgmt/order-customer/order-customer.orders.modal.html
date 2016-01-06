@@ -18,7 +18,7 @@
 
                     <tr ng-repeat="order in orders| orderBy:'timestamp':true" ng-click="addOrder(order)">
                         <td>{{order.timestamp| date:'dd.MM.yy' }}</td>
-                        <td><span ng-repeat="offer in order.offers">{{offer.count}}x {{offer.order.title}},&nbsp;</span></td>
+                        <td><span ng-repeat="offer in order.offers"><span ng-show="{{$index!=0}}">,&nbsp;</span>{{offer.count}}x {{offer.order.title}}</span></td>
                         <td nowrap>{{getPrice(order) | priceEuro}}</td>
                     </tr>
                 </tbody>

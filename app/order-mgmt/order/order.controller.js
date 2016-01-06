@@ -1,5 +1,6 @@
 angular.module('app.order-mgmt').controller('OrderCntl',
-    function ($filter, $scope, $sce, $stateParams, orderFactory, globalSpinner, oldOrderMerger, $state, $modal) {
+
+    function ($filter, $scope, $sce, $stateParams, orderFactory, categoriesJsonRestService, globalSpinner, oldOrderMerger, $state, $modal) {
         'use strict';
 
         var self = this;
@@ -15,39 +16,7 @@ angular.module('app.order-mgmt').controller('OrderCntl',
         });
 
         $scope.tables = [1,2,3,4,5,6];
-        $scope.orderCategories = [
-            {
-                title: 'Vorspeisen',
-                content: {
-                    100: "Suppen",
-                    101: "Beilagen",
-                    102: "Schnaps",
-                    103: "Salate"
-                }
-            },
-            {
-                title: 'Getränke',
-                content: {
-                    200: "Alkoholfrei",
-                    201: "Aperitiv"
-                }
-            },
-            {
-                title: 'Hauptspeisen',
-                content: {
-                    300: "Schnitzel",
-                    301: "Rind",
-                    302: "Lamm",
-                    303: "Fisch"
-                }
-            },
-            {
-                title: 'Desserts',
-                content: {
-                    400: "Eis"
-                }
-            }
-        ];
+        $scope.orderCategories = categoriesJsonRestService.query(); //load categories from json
 
         $scope.orderCategoryIsDisabled = function (content) {
             if (!content) return true;
@@ -195,8 +164,7 @@ angular.module('app.order-mgmt').controller('OrderCntl',
                 }
             });
 
-            modalInstance.result.then(function (selectedItem) {
-                $scope.selected = selectedItem;
+            modalInstance.result.then(function () {
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
@@ -221,5 +189,5 @@ angular.module('app.order-mgmt').controller('OrderCntl',
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
-        }
+        };
     });

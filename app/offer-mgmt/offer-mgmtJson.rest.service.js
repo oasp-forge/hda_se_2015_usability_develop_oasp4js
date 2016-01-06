@@ -1,4 +1,3 @@
-
 angular.module('app.offer-mgmt').factory('offerManagementJsonRestService', function ($resource) {
     'use strict';
     

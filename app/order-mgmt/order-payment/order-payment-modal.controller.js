@@ -65,6 +65,7 @@ angular.module('app.order-mgmt').controller('OrderPaymentModalCtrl',
                     $scope.order.offers[i].payed += $scope.calcNumBill($scope.order.offers[i]);
                     //$scope.order.offers[i].curBill = 0;
                 }
+                $modalInstance.close();
             };
             
             //Gesamtpreis überwachen
@@ -98,7 +99,7 @@ angular.module('app.order-mgmt').controller('OrderPaymentModalCtrl',
             };
             
             $scope.ok = function () {
-                $modalInstance.close($scope.selected.item);
+                $modalInstance.close();
             };
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel');
@@ -107,7 +108,7 @@ angular.module('app.order-mgmt').controller('OrderPaymentModalCtrl',
                 return 'category' + categoryOrderMap[index];
             };
             
-            //Autosave on leaving State if Order changed
+            //Close Modal on leaving state
             $scope.$on('$stateChangeStart', function (event) {
                 $modalInstance.dismiss('cancel');
             });
