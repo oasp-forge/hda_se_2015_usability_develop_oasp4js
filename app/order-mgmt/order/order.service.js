@@ -4,7 +4,7 @@
  * @module app.offer-mgmt
  * @requires offer-mgmt.offerManagementRestService
  */
-angular.module('app.order-mgmt').factory('orderFactory2', function (ORDER_STORAGE) {
+angular.module('app.order-mgmt').factory('orderFactory2', function (ORDER_STORAGE, categoriesJson) {
     'use strict';
     return {
         /**
