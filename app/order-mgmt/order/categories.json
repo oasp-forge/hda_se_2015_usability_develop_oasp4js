@@ -4,8 +4,7 @@
         "content": {
             "100": "Suppen",
             "101": "Beilagen",
-            "102": "Schnaps",
-            "103": "Salate"
+            "102": "Salate"
         }
     },
     {
@@ -27,7 +26,8 @@
     {
         "title": "Desserts",
         "content": {
-            "400": "Eis"
+            "400": "Eis",
+            "401": "Pudding"
         }
     }
 ]

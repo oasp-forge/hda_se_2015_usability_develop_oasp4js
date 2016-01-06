@@ -1,44 +1,119 @@
 [
     {
-        "id" : 101,
+        "id": 1,
+        "title": "Rindersuppe",
+        "desc": "mit ganzen Rindern",
+        "price": 4.95,
+        "category": [
+            100
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Pommes Frites",
+        "desc": "aus glücklichen Kartoffeln",
+        "price": 3.95,
+        "category": [
+            101
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Römersalat",
+        "desc": "so alt wie die Römer",
+        "price": 3.95,
+        "category": [
+            102
+        ]
+    },
+    {
+        "id": 101,
+        "title": "Cola",
+        "desc": "0,33l mit Eis",
+        "price": 2.50,
+        "category": [
+            200
+        ]
+    },
+    {
+        "id": 102,
+        "title": "Sangria Eimer",
+        "desc": "5,0l mit Strohhälmen",
+        "price": 15.95,
+        "category": [
+            201
+        ]
+    },
+    {
+        "id": 103,
+        "title": "Brennspiritus",
+        "desc": "0,1l mit Schirmchen",
+        "price": 0.95,
+        "category": [
+            201
+        ]
+    },
+    {
+        "id": 201,
         "title": "Cordon Bleu",
         "desc": "gefüllt mit Schinken und Käse",
         "price": 11.95,
-        "category": [300]
-    }, 
+        "category": [
+            300
+        ]
+    },
     {
-        "id" : 102,
-        "title": "Cordon Bleu Art des Hauses",
-        "desc": "gefüllt mit Schinken, Knobi und Käse",
+        "id": 202,
+        "title": "Jägerschnitzel",
+        "desc": "mit Pilzrahmsoße, Pommes Frites und Salat",
         "price": 11.95,
-        "category": [300]
-    }, 
+        "category": [
+            300
+        ]
+    },
     {
-        "id" : 103,
-        "title": "Rindgericht 1",
-        "desc": "Beschreibung",
+        "id": 203,
+        "title": "Rumsteack",
+        "desc": "mit Pommes Frites und Salat",
         "price": 11.95,
-        "category": [301]
-    }, 
+        "category": [
+            301
+        ]
+    },
     {
-        "id" : 104,
-        "title": "Rindgericht 2",
-        "desc": "Beschreibung",
+        "id": 204,
+        "title": "Lammkoteletts",
+        "desc": "von glücklichen Bauern",
         "price": 11.95,
-        "category": [301]
-    }, 
+        "category": [
+            302
+        ]
+    },
     {
-        "id" : 201,
-        "title": "Cola",
-        "desc": "mit Eis",
-        "price": 2.2,
-        "category": [200]
-    }, 
+        "id": 205,
+        "title": "Fischstäbchen",
+        "desc": "vom Aldi mit Pommes Frites und Salat",
+        "price": 4.95,
+        "category": [
+            303
+        ]
+    },
     {
-        "id" : 202,
-        "title": "Schnaps",
-        "desc": "mit Zitrone",
-        "price": 3.5,
-        "category": [201]
+        "id": 303,
+        "title": "Bananensplit",
+        "desc": "kann Spuren von Bananen und Eis enthalten",
+        "price": 3.95,
+        "category": [
+            400
+        ]
+    },
+    {
+        "id": 304,
+        "title": "Schokoladen Pudding",
+        "desc": "aus dem Topf",
+        "price": 3.95,
+        "category": [
+            401
+        ]
     }
 ]
